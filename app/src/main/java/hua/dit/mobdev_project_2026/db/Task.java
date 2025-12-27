@@ -16,8 +16,8 @@ import java.util.Date;
         @ForeignKey(
                 entity = Status.class,
                 parentColumns = {"id"},
-                childColumns = {"statusId"})
-        }, indices = { @Index("statusId") } )
+                childColumns = {"status_id"})
+        }, indices = { @Index("status_id") } )
 public class Task {
 
     @PrimaryKey(autoGenerate = true)
