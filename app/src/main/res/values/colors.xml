@@ -3,14 +3,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="backgroundColor">#F0DDDD</color>
-
-    <color name="purple_gray">#504A59</color>
-    <color name="purple_gray_darker">#262424</color>
-
-    <color name="purple_200">#6D4C4C</color>
-    <color name="purple_500">#8A6F6F </color>
+    <color name="colorPrimary">#8F8297</color>
+    <color name="colorPrimaryVariant">#504A59</color>
+    <color name="colorSecondary">#6D4C4C</color>
+    <color name="colorSecondaryVariant">#4A3A3A</color>
     <color name="text_color">#2E2E2E </color>
-
-    <color name="teal_200">#C8B1B1</color>
-    <color name="teal_700">#FF018786</color>
 </resources>

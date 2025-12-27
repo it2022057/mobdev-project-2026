@@ -9,7 +9,7 @@
     </style>
 
     <style name="activity_sub_header" parent="TextAppearance.AppCompat">
-        <item name="android:textSize">11dp</item>
+        <item name="android:textSize">10sp</item>
         <item name="android:fontFamily">casual</item>
         <item name="android:textStyle">bold|italic</item>
         <item name="android:textColor">@color/black</item>
