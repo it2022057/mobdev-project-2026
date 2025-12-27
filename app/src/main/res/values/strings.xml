@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">mobdev-project-2026</string>
+    <string name="main_header">LoukIt !</string>
+    <string name="sub_header">Your Daily Task Manager</string>
+    <string name="main_activity_button1">See your tasks</string>
+    <string name="main_activity_button2_label">Config</string>
 </resources>
