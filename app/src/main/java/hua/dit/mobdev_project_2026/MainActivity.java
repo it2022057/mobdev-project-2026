@@ -1,12 +1,14 @@
 package hua.dit.mobdev_project_2026;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -48,5 +50,11 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "on-destroy()...Closing the db !");
         MySingleton.getInstance(getApplicationContext()).close();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d(TAG, "Changed state");
     }
 }
