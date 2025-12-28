@@ -1,7 +1,10 @@
 package hua.dit.mobdev_project_2026;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "on-create()...");
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
@@ -24,6 +26,21 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Log.d(TAG, "on-create()...");
+
+        // See Tasks Button Listener
+        Button tasks_button = findViewById(R.id.main_activity_button1);
+        tasks_button.setOnClickListener((v) -> {
+            Log.d(TAG, "Pressed the See tasks button");
+        }); // End of tasks_button.setOnClickListener(...)
+
+        // App Config Button Listener
+        ImageButton app_config_button = findViewById(R.id.main_activity_button2);
+        app_config_button.setOnClickListener((v) -> {
+            Log.i(TAG, "Going to the app's configuration page");
+            Intent intent2 = new Intent(MainActivity.this, ConfigActivity.class);
+            startActivity(intent2);
+        }); // End of app_config_button.setOnClickListener(...)
     }
 
     @Override

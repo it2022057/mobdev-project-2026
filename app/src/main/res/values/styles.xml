@@ -4,14 +4,24 @@
         <item name="android:textSize">36sp</item>
         <item name="android:fontFamily">@font/fuzzy_bubbles</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/text_color</item>
         <item name="android:layout_marginTop">40dp</item>
     </style>
 
-    <style name="activity_sub_header" parent="TextAppearance.AppCompat">
+    <style name="activity_subheader" parent="TextAppearance.AppCompat">
         <item name="android:textSize">10sp</item>
         <item name="android:fontFamily">casual</item>
         <item name="android:textStyle">bold|italic</item>
         <item name="android:textColor">@color/black</item>
     </style>
+
+    <style name="activity_config_text" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/lora</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:minWidth">90dp</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
 </resources>

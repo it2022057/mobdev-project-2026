@@ -8,4 +8,5 @@
     <color name="colorSecondary">#6D4C4C</color>
     <color name="colorSecondaryVariant">#4A3A3A</color>
     <color name="text_color">#2E2E2E </color>
+    <color name="edit_text">#CC8B0000</color>
 </resources>

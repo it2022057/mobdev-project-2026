@@ -18,11 +18,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/sub_header"
-        style="@style/activity_sub_header"
+        android:id="@+id/subheader"
+        style="@style/activity_subheader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/sub_header"
+        android:text="@string/main_subheader"
         app:layout_constraintEnd_toEndOf="@+id/main_header"
         app:layout_constraintStart_toStartOf="@+id/main_header"
         app:layout_constraintTop_toBottomOf="@+id/main_header" />
@@ -32,10 +32,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
-        android:text="@string/main_activity_button1"
+        android:text="@string/main_activity_button1_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sub_header" />
+        app:layout_constraintTop_toBottomOf="@+id/subheader" />
 
     <ImageButton
         android:id="@+id/main_activity_button2"
@@ -45,6 +45,7 @@
         android:layout_marginBottom="16dp"
         android:background="@android:color/transparent"
         android:contentDescription="@string/main_activity_button2_label"
+        android:clickable="true"
         android:src="@drawable/ic_accessibility"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

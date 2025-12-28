@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/config"
+    tools:context=".ConfigActivity">
+
+    <TextView
+        android:id="@+id/config_activity_header"
+        style="@style/activity_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/config_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/config_activity_linear1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="90dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/config_activity_header">
+
+        <TextView
+            android:id="@+id/config_activity_duration_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            style="@style/activity_config_text"
+            android:text="@string/config_label1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/config_activity_header" />
+
+        <EditText
+            android:id="@+id/config_activity_duration_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="@string/duration_hint"
+            android:gravity="center_vertical"
+            android:hint="@string/duration_hint"
+            android:backgroundTint="@color/edit_text"
+            android:inputType="number"
+            android:maxLength="2" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/config_activity_linear2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/config_activity_linear1">
+
+        <TextView
+            android:id="@+id/config_activity_difficulty_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/config_label2"
+            style="@style/activity_config_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/config_activity_header" />
+
+        <EditText
+            android:id="@+id/config_activity_difficulty_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="@string/difficulty_hint"
+            android:gravity="center_vertical"
+            android:hint="@string/difficulty_hint"
+            android:backgroundTint="@color/edit_text"
+            android:inputType="number"
+            android:maxLength="2" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/config_activity_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/config_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="60dp"
+        app:layout_constraintTop_toBottomOf="@+id/config_activity_linear2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
