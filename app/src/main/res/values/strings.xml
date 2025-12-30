@@ -10,4 +10,7 @@
     <string name="duration_hint">1,2,3,…</string>
     <string name="difficulty_hint">[0,10] easy to difficult</string>
     <string name="config_button">Save</string>
+    <string name="view_tasks_header">Tasks</string>
+    <string name="view_tasks_image_button_label1">Add task</string>
+    <string name="view_tasks_image_button_label2">Add task</string>
 </resources>

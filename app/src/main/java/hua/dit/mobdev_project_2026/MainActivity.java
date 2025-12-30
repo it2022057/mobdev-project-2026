@@ -1,7 +1,6 @@
 package hua.dit.mobdev_project_2026;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -34,14 +33,17 @@ public class MainActivity extends AppCompatActivity {
         Button tasks_button = findViewById(R.id.main_activity_button1);
         tasks_button.setOnClickListener((v) -> {
             Log.d(TAG, "Pressed the See tasks button");
+            Intent intent = new Intent(MainActivity.this, ViewTasksActivity.class);
+            startActivity(intent);
+            Log.i(TAG, "Going to view all the non-completed tasks");
         }); // End of tasks_button.setOnClickListener(...)
 
         // App Config Button Listener
         ImageButton app_config_button = findViewById(R.id.main_activity_button2);
         app_config_button.setOnClickListener((v) -> {
-            Log.i(TAG, "Going to the app's configuration page");
             Intent intent2 = new Intent(MainActivity.this, ConfigActivity.class);
             startActivity(intent2);
+            Log.i(TAG, "Going to the app's configuration page");
         }); // End of app_config_button.setOnClickListener(...)
     }
 

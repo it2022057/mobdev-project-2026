@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fillViewport="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical">-->
+
+<!--        &lt;!&ndash; Short Name Input &ndash;&gt;-->
+
+<!--        &lt;!&ndash; Description Input &ndash;&gt;-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/editTextShortName"-->
+<!--            android:layout_width="380dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:autofillHints="short name"-->
+<!--            android:hint="@string/short_name_input"-->
+<!--            android:inputType="text"-->
+<!--            android:textColorHint="@color/black" />-->
+
+<!--        &lt;!&ndash; TimePicker for Start Time &ndash;&gt;-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/editTextDescription"-->
+<!--            android:layout_width="380dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:autofillHints="description"-->
+<!--            android:hint="@string/description_input"-->
+<!--            android:inputType="text"-->
+<!--            android:textColorHint="@color/black" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/textView1"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:text="@string/start_time_text_view"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="16sp" />-->
+
+<!--        <TimePicker-->
+<!--            android:id="@+id/timePickerStartTime"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content" />-->
+
+<!--        &lt;!&ndash; Duration Input &ndash;&gt;-->
+<!--        <EditText-->
+<!--            android:id="@+id/editTextDuration"-->
+<!--            android:layout_width="380dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:autofillHints="duration"-->
+<!--            android:hint="@string/duration_input"-->
+<!--            android:inputType="number"-->
+<!--            android:textColorHint="@color/black" />-->
+
+<!--        &lt;!&ndash; Location Input &ndash;&gt;-->
+<!--        <EditText-->
+<!--            android:id="@+id/editTextLocation"-->
+<!--            android:layout_width="380dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:autofillHints="location"-->
+<!--            android:hint="@string/location_input"-->
+<!--            android:inputType="text"-->
+<!--            android:textColorHint="@color/black" />-->
+
+<!--        &lt;!&ndash; Save Task Button &ndash;&gt;-->
+<!--        <Button-->
+<!--            android:id="@+id/btnSaveTask"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center_horizontal"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:text="@string/save_task_button" />-->
+<!--    </LinearLayout>-->
+
+
+</androidx.core.widget.NestedScrollView>
