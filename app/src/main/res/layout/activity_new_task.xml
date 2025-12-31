@@ -7,78 +7,168 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="vertical">-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/new_task_activity_constraint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".NewTaskActivity">
 
-<!--        &lt;!&ndash; Short Name Input &ndash;&gt;-->
+        <!-- Header -->
+        <TextView
+            android:id="@+id/new_task_activity_header"
+            style="@style/activity_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/new_task_header"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-<!--        &lt;!&ndash; Description Input &ndash;&gt;-->
+        <!-- Short Name (max 20) -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/short_name_layout"
+            style="@style/task_input"
+            android:hint="@string/short_name_hint"
+            app:counterEnabled="true"
+            app:counterMaxLength="20"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/new_task_activity_header">
 
-<!--        <EditText-->
-<!--            android:id="@+id/editTextShortName"-->
-<!--            android:layout_width="380dp"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:autofillHints="short name"-->
-<!--            android:hint="@string/short_name_input"-->
-<!--            android:inputType="text"-->
-<!--            android:textColorHint="@color/black" />-->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/short_name_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:inputType="textCapSentences"
+                android:maxLength="20" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-<!--        &lt;!&ndash; TimePicker for Start Time &ndash;&gt;-->
+        <!-- Brief Description (max 150) -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/brief_description_layout"
+            style="@style/task_input"
+            android:hint="@string/brief_description_hint"
+            app:counterEnabled="true"
+            app:counterMaxLength="150"
+            app:layout_constraintTop_toBottomOf="@id/short_name_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-<!--        <EditText-->
-<!--            android:id="@+id/editTextDescription"-->
-<!--            android:layout_width="380dp"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:autofillHints="description"-->
-<!--            android:hint="@string/description_input"-->
-<!--            android:inputType="text"-->
-<!--            android:textColorHint="@color/black" />-->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/description_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:inputType="textMultiLine|textCapSentences"
+                android:maxLength="150"
+                android:minLines="3"
+                android:gravity="top" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-<!--        <TextView-->
-<!--            android:id="@+id/textView1"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:text="@string/start_time_text_view"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:textSize="16sp" />-->
+        <!-- Difficulty [0,10] -> 0: very easy task, 10: very difficult task -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/difficulty_layout"
+            style="@style/task_input"
+            app:helperText="@string/difficulty_hint"
+            android:hint="@string/difficulty_hint2"
+            app:counterEnabled="true"
+            app:counterMaxLength="2"
+            app:layout_constraintTop_toBottomOf="@id/brief_description_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-<!--        <TimePicker-->
-<!--            android:id="@+id/timePickerStartTime"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content" />-->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/difficulty_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="2" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-<!--        &lt;!&ndash; Duration Input &ndash;&gt;-->
-<!--        <EditText-->
-<!--            android:id="@+id/editTextDuration"-->
-<!--            android:layout_width="380dp"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:autofillHints="duration"-->
-<!--            android:hint="@string/duration_input"-->
-<!--            android:inputType="number"-->
-<!--            android:textColorHint="@color/black" />-->
+        <!-- Start Time (hours & minutes using TimePicker) -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/start_time_layout"
+            style="@style/task_input"
+            android:hint="@string/start_time_hint"
+            app:endIconMode="custom"
+            app:endIconDrawable="@android:drawable/ic_lock_idle_alarm"
+            app:layout_constraintTop_toBottomOf="@id/difficulty_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-<!--        &lt;!&ndash; Location Input &ndash;&gt;-->
-<!--        <EditText-->
-<!--            android:id="@+id/editTextLocation"-->
-<!--            android:layout_width="380dp"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:autofillHints="location"-->
-<!--            android:hint="@string/location_input"-->
-<!--            android:inputType="text"-->
-<!--            android:textColorHint="@color/black" />-->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/start_time_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:clickable="true"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-<!--        &lt;!&ndash; Save Task Button &ndash;&gt;-->
-<!--        <Button-->
-<!--            android:id="@+id/btnSaveTask"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="center_horizontal"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:text="@string/save_task_button" />-->
-<!--    </LinearLayout>-->
+        <!-- Duration (hours) -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/duration_layout"
+            style="@style/task_input"
+            app:helperText="@string/duration_helper_text"
+            android:hint="@string/duration_hint2"
+            app:counterEnabled="true"
+            app:counterMaxLength="2"
+            app:layout_constraintTop_toBottomOf="@id/start_time_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/duration_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:imeOptions="actionNext"
+                android:maxLength="2" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Location (optional) -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/location_layout"
+            style="@style/task_input"
+            app:helperText="@string/location_helper_text"
+            android:hint="@string/location_hint"
+            app:layout_constraintTop_toBottomOf="@id/duration_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/location_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPostalAddress|textCapWords"
+                android:imeOptions="actionDone" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Buttons -->
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="30dp"
+            android:text="Save"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/location_layout" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="80dp"
+            android:text="Cancel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/location_layout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>

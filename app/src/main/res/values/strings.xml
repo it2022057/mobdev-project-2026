@@ -13,4 +13,13 @@
     <string name="view_tasks_header">Tasks</string>
     <string name="view_tasks_image_button_label1">Add task</string>
     <string name="view_tasks_image_button_label2">Add task</string>
+    <string name="new_task_header">Task Details</string>
+    <string name="short_name_hint">Short Name</string>
+    <string name="brief_description_hint">Brief Description</string>
+    <string name="start_time_hint">Tap to select start time</string>
+    <string name="location_hint">Location</string>
+    <string name="duration_hint2">Duration</string>
+    <string name="difficulty_hint2">Difficulty</string>
+    <string name="duration_helper_text">(hours)</string>
+    <string name="location_helper_text">(optional)</string>
 </resources>

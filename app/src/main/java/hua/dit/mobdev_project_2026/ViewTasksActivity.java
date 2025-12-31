@@ -49,15 +49,14 @@ public class ViewTasksActivity extends AppCompatActivity {
             intent.setType("text/html");
             intent.putExtra(Intent.EXTRA_TITLE, "tasks.html");
             startActivityForResult(intent, REQUEST_CODE);
-
         }); // End of download_button.setOnClickListener(...)
 
         // New Task Button Listener
         ImageButton new_task_button = findViewById(R.id.view_tasks_add_button);
         new_task_button.setOnClickListener((v) -> {
             Log.d(TAG, "New task button pressed");
-            Intent intent = new Intent(ViewTasksActivity.this, NewTaskActivity.class);
-            startActivity(intent);
+            Intent intent2 = new Intent(ViewTasksActivity.this, NewTaskActivity.class);
+            startActivity(intent2);
             Log.i(TAG, "Going to a new page to add a new task");
         }); // End of new_task_button.setOnClickListener(...)
     }
@@ -83,9 +82,9 @@ public class ViewTasksActivity extends AppCompatActivity {
                         bw.write(txt_msg);
                         bw.flush();
                         bw.close();
-                        Log.i(TAG, "File 2 successfully created !");
+                        Log.i(TAG, "File successfully created !");
                     } catch (Throwable t) {
-                        throw new RuntimeException("File 2 processing problem", t);
+                        throw new RuntimeException("File processing problem", t);
                     }
                 }).start();
             }
