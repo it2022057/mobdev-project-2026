@@ -14,7 +14,7 @@ public interface StatusDao {
     public void insertStatus(Status status);
 
     @Insert
-    public void insertAll(List<Status> status);
+    public List<Long> insertAll(List<Status> status);
 
     @Delete
     public void deleteStatus(Status status);

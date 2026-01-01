@@ -13,6 +13,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import hua.dit.mobdev_project_2026.db.AppDatabase;
+import hua.dit.mobdev_project_2026.db.Status;
+import hua.dit.mobdev_project_2026.db.StatusDao;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -28,6 +35,24 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         Log.d(TAG, "on-create()...");
+
+        // Every time the app starts, we need to initialize the database with predefined status values
+        new Thread(() -> {
+            // DB
+            AppDatabase db = MySingleton.getInstance(getApplicationContext()).getDb();
+            // Status Data
+            StatusDao statusDao = db.statusDao();
+            if (statusDao.getAllStatus().isEmpty()) {
+                final List<Status> statusList = new ArrayList<>();
+                statusList.add(new Status("RECORDED"));
+                statusList.add(new Status("IN_PROGRESS"));
+                statusList.add(new Status("EXPIRED"));
+                statusList.add(new Status("COMPLETED"));
+
+                List<Long> statusIds = statusDao.insertAll(statusList);
+                Log.i(TAG, "Status Data - statusIds: " + statusIds.size() + " :: " + statusIds);
+            }
+        }).start();
 
         // See Tasks Button Listener
         Button tasks_button = findViewById(R.id.main_activity_button1);

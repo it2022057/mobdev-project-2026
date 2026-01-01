@@ -16,8 +16,7 @@ public class Status {
     // i.e. "Recorded", "In progress", "Completed", "Expired"
     private String name;
 
-    public Status(long id, @NonNull String name) {
-        this.id = id;
+    public Status(@NonNull String name) {
         this.name = name;
     }
 

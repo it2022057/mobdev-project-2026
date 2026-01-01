@@ -52,8 +52,7 @@ public class Task {
     @Nullable
     private String location; // TODO: Make it @Embedded with extra info (i.e. address, state, etc.) or leave it like that
 
-    public Task(long id, String shortName, String description, int difficulty, Date dateValue, int startTime, int duration, long statusId, @Nullable String location) {
-        this.id = id;
+    public Task(String shortName, String description, int difficulty, Date dateValue, int startTime, int duration, long statusId, @Nullable String location) {
         this.shortName = shortName;
         this.description = description;
         this.difficulty = difficulty;

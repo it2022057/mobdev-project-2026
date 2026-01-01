@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.TimePicker;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +14,10 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Locale;
+
+import hua.dit.mobdev_project_2026.db.AppDatabase;
+import hua.dit.mobdev_project_2026.db.Task;
+import hua.dit.mobdev_project_2026.db.TaskDao;
 
 public class NewTaskActivity extends AppCompatActivity {
 
@@ -62,9 +65,23 @@ public class NewTaskActivity extends AppCompatActivity {
         // Save new task Button Listener
         Button save_button = findViewById(R.id.new_task_activity_save_button);
         save_button.setOnClickListener((v) -> {
-            Log.d(TAG, "New task save button pressed");
             /* TODO: 1. Save the new task in the database
                      2. Make a Toast.LENGTH_SHORT for successful save*/
+//            new Thread(()->{
+//                Log.d(TAG, "New task save button pressed");
+//
+//                // DB
+//                AppDatabase db = MySingleton.getInstance(getApplicationContext()).getDb();
+//                TaskDao taskDao = db.taskDao();
+//                // INSERT
+//
+//                Log.i(TAG, "Data successfully Stored !");
+//                Log.i(TAG, "Data successfully Retrieved ! - " + myTableObjlist.size());
+//                Log.i(TAG, "List:: " + myTableObjlist);
+//
+//                // Note: The above code cannot be executed in main thread !
+//
+//            }).start();
             Intent intent = new Intent(NewTaskActivity.this, ViewTasksActivity.class);
             startActivity(intent);
             Log.i(TAG, "Back to view tasks page");
@@ -78,5 +95,12 @@ public class NewTaskActivity extends AppCompatActivity {
             startActivity(intent2);
             Log.i(TAG, "Back to view tasks page");
         }); // End of cancel_button.setOnClickListener(...)
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "on-destroy()...Closing the db !");
+        MySingleton.getInstance(getApplicationContext()).close();
+        super.onDestroy();
     }
 }
