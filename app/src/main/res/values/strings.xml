@@ -22,4 +22,6 @@
     <string name="difficulty_hint2">Difficulty</string>
     <string name="duration_helper_text">(hours)</string>
     <string name="location_helper_text">(optional)</string>
+    <string name="new_task_activity_button1">Save</string>
+    <string name="new_task_activity_button2">Cancel</string>
 </resources>

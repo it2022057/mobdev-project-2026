@@ -11,11 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import java.util.Calendar;
 
 public class TimePickerDialogFragment extends DialogFragment implements android.app.TimePickerDialog.OnTimeSetListener {
 
-    private static final String TAG = "TimePickerDialogFrag.";
+    private static final String TAG = "TimePickerDialogFrag";
+    public static final String RESULT_KEY = "start_time_result";
+    public static final String HOUR_KEY = "hour";
+    public static final String MINUTE_KEY = "minute";
 
     @NonNull
     @Override
@@ -32,6 +37,12 @@ public class TimePickerDialogFragment extends DialogFragment implements android.
 
     @Override
     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-        Log.i(TAG, "Selected Time: hourOfDay= " + hourOfDay + " , " + minute);
+        /* TODO: Do something with the date the user provides */
+        Log.i(TAG, "Selected Time: hourOfDay= " + hourOfDay + ":" + minute);
+        Bundle result = new Bundle();
+        result.putInt(HOUR_KEY, hourOfDay);
+        result.putInt(MINUTE_KEY, minute);
+
+        getParentFragmentManager().setFragmentResult(RESULT_KEY, result);
     }
 }

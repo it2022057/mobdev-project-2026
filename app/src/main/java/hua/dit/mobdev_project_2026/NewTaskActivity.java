@@ -1,13 +1,20 @@
 package hua.dit.mobdev_project_2026;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.TimePicker;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.Locale;
 
 public class NewTaskActivity extends AppCompatActivity {
 
@@ -25,5 +32,51 @@ public class NewTaskActivity extends AppCompatActivity {
             return insets;
         });
         Log.d(TAG, "on-create()...");
+
+        // All the input provided by the user in order to create a new task
+        final TextInputEditText short_name_input = findViewById(R.id.short_name_input);
+        final TextInputEditText brief_description_input = findViewById(R.id.brief_description_input);
+        final TextInputEditText difficulty_input = findViewById(R.id.difficulty_input);
+        final TextInputEditText start_time_input = findViewById(R.id.start_time_input);
+        final TextInputEditText duration_input = findViewById(R.id.duration_input);
+        final TextInputEditText location_input = findViewById(R.id.location_input);
+
+        // Start time Button Listener (TimePicker pop_up)
+        start_time_input.setOnClickListener((v) -> {
+            // Show TimePickerDialog and Handle "OK" (time set) button
+            new TimePickerDialogFragment().show(getSupportFragmentManager(), "Start Time");
+            // Listen for the result and update the UI
+            getSupportFragmentManager().setFragmentResultListener(
+                    TimePickerDialogFragment.RESULT_KEY,
+                    this,
+                    (requestKey, bundle) -> {
+                        int hour = bundle.getInt(TimePickerDialogFragment.HOUR_KEY);
+                        int minute = bundle.getInt(TimePickerDialogFragment.MINUTE_KEY);
+
+                        String time = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
+                        start_time_input.setText(time);
+                    }
+            );
+        }); // End of start_time_input.setOnClickListener(...)
+
+        // Save new task Button Listener
+        Button save_button = findViewById(R.id.new_task_activity_save_button);
+        save_button.setOnClickListener((v) -> {
+            Log.d(TAG, "New task save button pressed");
+            /* TODO: 1. Save the new task in the database
+                     2. Make a Toast.LENGTH_SHORT for successful save*/
+            Intent intent = new Intent(NewTaskActivity.this, ViewTasksActivity.class);
+            startActivity(intent);
+            Log.i(TAG, "Back to view tasks page");
+        }); // End of save_button.setOnClickListener(...)
+
+        // Cancel Button Listener
+        Button cancel_button = findViewById(R.id.new_task_activity_cancel_button);
+        cancel_button.setOnClickListener((v) -> {
+            Log.d(TAG, "New task cancel button pressed");
+            Intent intent2 = new Intent(NewTaskActivity.this, ViewTasksActivity.class);
+            startActivity(intent2);
+            Log.i(TAG, "Back to view tasks page");
+        }); // End of cancel_button.setOnClickListener(...)
     }
 }

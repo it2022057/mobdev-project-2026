@@ -56,7 +56,7 @@
             app:layout_constraintEnd_toEndOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/description_input"
+                android:id="@+id/brief_description_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionNext"
@@ -148,23 +148,23 @@
 
         <!-- Buttons -->
         <Button
-            android:id="@+id/btn_save"
+            android:id="@+id/new_task_activity_save_button"
             android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="30dp"
-            android:text="Save"
+            android:text="@string/new_task_activity_button1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/location_layout" />
 
         <Button
-            android:id="@+id/btn_cancel"
+            android:id="@+id/new_task_activity_cancel_button"
             android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="30dp"
-            android:text="Cancel"
+            android:text="@string/new_task_activity_button2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/location_layout" />
