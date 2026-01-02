@@ -1,6 +1,7 @@
 package hua.dit.mobdev_project_2026;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -51,6 +52,12 @@ public class NewTaskActivity extends AppCompatActivity {
         final TextInputEditText start_time_input = findViewById(R.id.start_time_input);
         final TextInputEditText duration_input = findViewById(R.id.duration_input);
         final TextInputEditText location_input = findViewById(R.id.location_input);
+
+        // Update Widgets with default duration & difficulty (if any) from Shared Preferences
+        final SharedPreferences sp = getSharedPreferences("SHARED_PREF", MODE_PRIVATE);
+        // If values are not set yet (-1), keep the EditTexts empty ("")
+        duration_input.setText(sp.getInt("default_duration", -1) == -1 ? "" : String.valueOf(sp.getInt("default_duration", -1)));
+        difficulty_input.setText(sp.getInt("default_difficulty", -1) == -1 ? "" : String.valueOf(sp.getInt("default_difficulty", -1)));
 
         // Start time Button Listener (TimePicker pop_up)
         start_time_input.setOnClickListener((v) -> {
@@ -185,14 +192,6 @@ public class NewTaskActivity extends AppCompatActivity {
             Log.i(TAG, "Back to view tasks page");
         }); // End of cancel_button.setOnClickListener(...)
     }
-
-    @Override
-    protected void onDestroy() {
-        Log.d(TAG, "on-destroy()...Closing the db !");
-        MySingleton.getInstance(getApplicationContext()).close();
-        super.onDestroy();
-    }
-
 
     /**
      * Ensures the text from TextInputEditText is safe.

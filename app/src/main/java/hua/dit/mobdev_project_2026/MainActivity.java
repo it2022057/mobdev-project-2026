@@ -74,9 +74,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        Log.d(TAG, "on-destroy()...Closing the db !");
-        MySingleton.getInstance(getApplicationContext()).close();
         super.onDestroy();
+        Log.d(TAG, "on-destroy()");
     }
 
     @Override
