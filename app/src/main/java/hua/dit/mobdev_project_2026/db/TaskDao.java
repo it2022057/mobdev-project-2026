@@ -13,7 +13,7 @@ import java.util.List;
 public interface TaskDao {
 
     @Insert
-    public void insertTask(Task task);
+    public Long insertTask(Task task);
 
     @Update
     public void updateTask(Task task);
@@ -33,7 +33,10 @@ public interface TaskDao {
     @Query("SELECT t.id, t.short_name, s.name FROM task t, status s WHERE (t.status_id = s.id) AND (t.status_id != (SELECT id FROM status WHERE name = 'Completed')) ORDER BY CASE WHEN t.status_id = (SELECT id FROM status WHERE name = 'Expired') THEN 1 WHEN t.status_id = (SELECT id FROM status WHERE name = 'IN-PROGRESS') THEN 2 ELSE 3 END")
     public List<TaskWithStatus> getNonCompletedTasks();
 
-    @Query("SELECT t.id, t.short_name, s.name FROM task t, status s WHERE t.status_id = s.id")
+    @Query("SELECT t.id, t.short_name, s.name AS status FROM task t, status s WHERE t.status_id = s.id")
+    public List<TaskWithStatus> getTaskWithStatusList();
+
+    @Query("SELECT t.id, t.short_name, s.name AS status FROM task t, status s WHERE t.status_id = s.id")
     public Cursor getTaskWithStatusCursor();
 
 }

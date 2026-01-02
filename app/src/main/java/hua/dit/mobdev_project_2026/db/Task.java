@@ -10,6 +10,7 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import java.sql.Time;
 import java.util.Date;
 
 @Entity(foreignKeys = {
@@ -39,7 +40,7 @@ public class Task {
     private Date dateValue;
 
     @ColumnInfo(name = "start_time")
-    private int startTime; // TODO: Date or int ??? I will decide later on...
+    private Time startTime;
 
     @ColumnInfo
     @IntRange(from = 1)
@@ -52,7 +53,7 @@ public class Task {
     @Nullable
     private String location; // TODO: Make it @Embedded with extra info (i.e. address, state, etc.) or leave it like that
 
-    public Task(String shortName, String description, int difficulty, Date dateValue, int startTime, int duration, long statusId, @Nullable String location) {
+    public Task(String shortName, String description, int difficulty, Date dateValue, Time startTime, int duration, long statusId, @Nullable String location) {
         this.shortName = shortName;
         this.description = description;
         this.difficulty = difficulty;
@@ -103,11 +104,11 @@ public class Task {
         this.dateValue = dateValue;
     }
 
-    public int getStartTime() {
+    public Time getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(int startTime) {
+    public void setStartTime(Time startTime) {
         this.startTime = startTime;
     }
 

@@ -2,8 +2,11 @@ package hua.dit.mobdev_project_2026;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,16 +16,21 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import hua.dit.mobdev_project_2026.db.AppDatabase;
+import hua.dit.mobdev_project_2026.db.MyConverters;
+import hua.dit.mobdev_project_2026.db.StatusDao;
 import hua.dit.mobdev_project_2026.db.Task;
 import hua.dit.mobdev_project_2026.db.TaskDao;
+import hua.dit.mobdev_project_2026.db.TaskWithStatus;
 
 public class NewTaskActivity extends AppCompatActivity {
 
     private static final String TAG = "NewTaskActivity";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,26 +73,107 @@ public class NewTaskActivity extends AppCompatActivity {
         // Save new task Button Listener
         Button save_button = findViewById(R.id.new_task_activity_save_button);
         save_button.setOnClickListener((v) -> {
-            /* TODO: 1. Save the new task in the database
-                     2. Make a Toast.LENGTH_SHORT for successful save*/
-//            new Thread(()->{
-//                Log.d(TAG, "New task save button pressed");
-//
-//                // DB
-//                AppDatabase db = MySingleton.getInstance(getApplicationContext()).getDb();
-//                TaskDao taskDao = db.taskDao();
-//                // INSERT
-//
-//                Log.i(TAG, "Data successfully Stored !");
-//                Log.i(TAG, "Data successfully Retrieved ! - " + myTableObjlist.size());
-//                Log.i(TAG, "List:: " + myTableObjlist);
-//
-//                // Note: The above code cannot be executed in main thread !
-//
-//            }).start();
-            Intent intent = new Intent(NewTaskActivity.this, ViewTasksActivity.class);
-            startActivity(intent);
-            Log.i(TAG, "Back to view tasks page");
+            Log.d(TAG, "New task save button pressed");
+
+            boolean ok = true;
+
+            // Task values
+            String short_name = getTextSafe(short_name_input);
+            String brief_description = getTextSafe(brief_description_input);
+            int difficulty = getIntSafe(difficulty_input, 10);
+            String start_time = getTextSafe(start_time_input);
+            int duration = getIntSafe(duration_input, 24);
+            String location = getTextSafe(location_input);
+
+        /* Start of validation check... */
+
+            // Short name validation check
+            if (short_name.isEmpty()) {
+                // Do not let the UI go back in the view tasks page
+                ok = false;
+                // Show toast message on screen
+                Toast.makeText(getApplicationContext(), "Short name NOT specified yet !", Toast.LENGTH_SHORT).show();
+            }
+            // Brief description validation check
+            if (brief_description.isEmpty()) {
+                ok = false;
+                Toast.makeText(getApplicationContext(), "Name NOT specified yet !", Toast.LENGTH_SHORT).show();
+            }
+            // Difficulty validation check
+            // Empty input
+            if (difficulty == -1) {
+                ok = false;
+                Toast.makeText(getApplicationContext(), "Difficulty input INVALID !", Toast.LENGTH_SHORT).show();
+                // Exceeded value 10
+            } else if (difficulty == -3) {
+                ok = false;
+                Toast.makeText(getApplicationContext(), "Difficulty must not be > 10 !", Toast.LENGTH_SHORT).show();
+            }
+            // Start time validation check
+            if (start_time.isEmpty()) {
+                ok = false;
+                Toast.makeText(getApplicationContext(), "Start time NOT specified yet !", Toast.LENGTH_SHORT).show();
+            }
+            // Duration validation check
+            switch (duration) {
+                // Empty input
+                case -1:
+                    ok = false;
+                    Toast.makeText(getApplicationContext(), "Duration input INVALID !", Toast.LENGTH_SHORT).show();
+                    break;
+                // Not positive
+                case -2:
+                    ok = false;
+                    Toast.makeText(getApplicationContext(), "Duration NOT positive !", Toast.LENGTH_SHORT).show();
+                    break;
+                // Exceeded value 24 (24 hours -> 1 day)
+                case -3:
+                    ok = false;
+                    Toast.makeText(getApplicationContext(), "Duration should not be > 24 (one-day) !", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        /* ...End of validation check */
+
+            // If there was at least one error, do not lose time and recourses to open the DB
+            if (!ok) {
+                Log.i(TAG, "Failed to insert the new task in the DB");
+                return;
+            }
+
+            // Dictate UI thread to update UI using a Handler
+            Handler handler = new Handler(Looper.getMainLooper());
+
+            // DB work in background thread
+            new Thread(() -> {
+                // DB
+                AppDatabase db = MySingleton.getInstance(getApplicationContext()).getDb();
+                // DAOs
+                TaskDao taskDao = db.taskDao();
+                StatusDao statusDao = db.statusDao();
+
+                // Default status for a newly created Task is "RECORDED".
+                long status_id = statusDao.getStatus("RECORDED").getId();
+                // Creates a new task object to insert later on in the DB
+                Task task = new Task(short_name, brief_description, difficulty, new Date(), new MyConverters().stringToTime(start_time), duration, status_id, location);
+
+                // INSERT
+                long task_id = taskDao.insertTask(task);
+                Log.i(TAG, "Data successfully Stored !");
+                Log.i(TAG, "New Task ID: " + task_id);
+                // Show ALL ...
+                List<Task> taskList = taskDao.getAllTasks();
+                Log.i(TAG, "Data successfully Retrieved ! --> Size: " + taskList.size() + " :: " + taskList);
+                List<TaskWithStatus> taskWithStatuses = taskDao.getTaskWithStatusList();
+                Log.i(TAG, taskWithStatuses.size() + " :: " + taskWithStatuses);
+
+                // This change should be made by the MAIN thread
+                handler.post(() -> {
+                    Toast.makeText(getApplicationContext(), "Task with id: " + task_id + ", saved successfully", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(NewTaskActivity.this, ViewTasksActivity.class);
+                    startActivity(intent);
+                    Log.i(TAG, "Back to view tasks page");
+                });
+            }).start();
         }); // End of save_button.setOnClickListener(...)
 
         // Cancel Button Listener
@@ -103,4 +192,49 @@ public class NewTaskActivity extends AppCompatActivity {
         MySingleton.getInstance(getApplicationContext()).close();
         super.onDestroy();
     }
+
+
+    /**
+     * Ensures the text from TextInputEditText is safe.
+     * <p>
+     * Rules:
+     * <p> - Empty / null → invalid
+     *
+     * @return a text safe string, <p> or an empty one
+     */
+    private String getTextSafe(TextInputEditText editText) {
+        return editText.getText() == null ? "" : editText.getText().toString().trim();
+    }
+
+    /**
+     * Normalizes a positive integer from TextInputEditText.
+     * <p>
+     * Rules:
+     * <p> - Empty / null → invalid
+     * <p> - Must be >= 1
+     * <p> - Removes leading zeros
+     * <p> - Optional max value
+     *
+     * @return normalized int if valid, <p> or -1 if empty||exception, <p> or -2 if not positive <p> or -3 if it exceeds the max value
+     */
+    private int getIntSafe(TextInputEditText input, int maxValue) {
+        String raw = getTextSafe(input);
+        if (raw.isEmpty()) return -1;
+
+        int value;
+        try {
+            value = Integer.parseInt(raw);
+        } catch (NumberFormatException ex) {
+            return -1;
+        }
+
+        // Only check for positive integer in the Duration input, because Difficulty input can be 0
+        if (Objects.requireNonNull(input.getHint()).toString().trim().equals("Duration")) {
+            if (value <= 0) return -2;
+        }
+        if (maxValue > 0 && value > maxValue) return -3;
+
+        return value;
+    }
+
 }

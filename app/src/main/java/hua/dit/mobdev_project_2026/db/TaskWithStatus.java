@@ -1,10 +1,13 @@
 package hua.dit.mobdev_project_2026.db;
 
 
+import androidx.room.ColumnInfo;
+
 public class TaskWithStatus {
 
     private int id;
 
+    @ColumnInfo(name = "short_name")
     private String shortName;
 
     private String status;
