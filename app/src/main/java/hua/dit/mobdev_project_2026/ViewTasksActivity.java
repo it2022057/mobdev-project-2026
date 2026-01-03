@@ -4,25 +4,36 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.BufferedWriter;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+import hua.dit.mobdev_project_2026.db.AppDatabase;
+import hua.dit.mobdev_project_2026.db.TaskDao;
+import hua.dit.mobdev_project_2026.db.TaskWithStatus;
+import hua.dit.mobdev_project_2026.list.MyTaskAdapter;
 
 public class ViewTasksActivity extends AppCompatActivity {
 
     private static final String TAG = "ViewTasksActivity";
 
     private static final int REQUEST_CODE = 123;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +46,37 @@ public class ViewTasksActivity extends AppCompatActivity {
             return insets;
         });
         Log.d(TAG, "on-create()...");
+
+        // Dictate UI thread to update UI using a Handler
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        // DB work in background thread
+        new Thread(() -> {
+            // DB
+            AppDatabase db = MySingleton.getInstance(getApplicationContext()).getDb();
+            // DAO
+            TaskDao taskDao = db.taskDao();
+
+            // Gets all the non completed tasks with the appropriate order,
+            // so that the «urgent» tasks (e.g., tasks «expired») appear on the top of their screen
+            List<TaskWithStatus> nonCompletedTasks = taskDao.getNonCompletedTasks();
+            Log.i(TAG, "NonCompletedTasks size = " + nonCompletedTasks.size());
+
+            // This change should be made by the MAIN thread
+            handler.post(() -> {
+                // Prepare Recycler View
+                RecyclerView recyclerView = findViewById(R.id.recycler_view);
+                // Set LayoutManager
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                // Attach custom adapter to the recycler view
+                MyTaskAdapter myTaskAdapter = new MyTaskAdapter(nonCompletedTasks);
+                recyclerView.setAdapter(myTaskAdapter);
+
+                if (nonCompletedTasks.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "No Urgent Tasks !", Toast.LENGTH_LONG).show();
+                }
+            });
+        }).start();
 
         // Export Tasks Button Listener
         ImageButton download_button = findViewById(R.id.view_tasks_download_button);

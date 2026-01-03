@@ -24,4 +24,5 @@
     <string name="location_helper_text">(optional)</string>
     <string name="new_task_activity_button1">Save</string>
     <string name="new_task_activity_button2">Cancel</string>
+    <string name="arrow">➡</string>
 </resources>

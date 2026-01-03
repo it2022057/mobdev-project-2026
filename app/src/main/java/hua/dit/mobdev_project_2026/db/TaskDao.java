@@ -30,7 +30,7 @@ public interface TaskDao {
     @Query("SELECT * FROM task WHERE short_name = :name")
     public Task findTaskByName(String name);
 
-    @Query("SELECT t.id, t.short_name, s.name FROM task t, status s WHERE (t.status_id = s.id) AND (t.status_id != (SELECT id FROM status WHERE name = 'Completed')) ORDER BY CASE WHEN t.status_id = (SELECT id FROM status WHERE name = 'Expired') THEN 1 WHEN t.status_id = (SELECT id FROM status WHERE name = 'IN-PROGRESS') THEN 2 ELSE 3 END")
+    @Query("SELECT t.id, t.short_name, s.name AS status FROM task t, status s WHERE (t.status_id = s.id) AND (t.status_id != (SELECT id FROM status WHERE name = 'COMPLETED')) ORDER BY CASE WHEN t.status_id = (SELECT id FROM status WHERE name = 'EXPIRED') THEN 1 WHEN t.status_id = (SELECT id FROM status WHERE name = 'IN_PROGRESS') THEN 2 ELSE 3 END")
     public List<TaskWithStatus> getNonCompletedTasks();
 
     @Query("SELECT t.id, t.short_name, s.name AS status FROM task t, status s WHERE t.status_id = s.id")
