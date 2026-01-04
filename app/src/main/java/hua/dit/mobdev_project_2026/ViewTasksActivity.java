@@ -2,6 +2,7 @@ package hua.dit.mobdev_project_2026;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -21,10 +23,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.BufferedWriter;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import hua.dit.mobdev_project_2026.db.AppDatabase;
+import hua.dit.mobdev_project_2026.db.MyConverters;
 import hua.dit.mobdev_project_2026.db.TaskDao;
 import hua.dit.mobdev_project_2026.db.TaskWithStatus;
 import hua.dit.mobdev_project_2026.list.MyTaskAdapter;
@@ -87,7 +92,9 @@ public class ViewTasksActivity extends AppCompatActivity {
             // Create an Intent
             Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
+            // HTML file (not plaintext)
             intent.setType("text/html");
+            // Add a title
             intent.putExtra(Intent.EXTRA_TITLE, "tasks.html");
             startActivityForResult(intent, REQUEST_CODE);
         }); // End of download_button.setOnClickListener(...)
@@ -107,29 +114,132 @@ public class ViewTasksActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
         super.onActivityResult(resultCode, resultCode, resultData);
 
-        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            // The result data contains a URI for the document or directory that
-            // the user selected.
-            if (resultData != null) {
-                final Uri uri = resultData.getData();
-                // Perform operations on the document using its URI.
+        // Check that:
+        // 1) This result corresponds to our request
+        // 2) The user completed the action successfully
+        // 3) We actually received data back
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK && resultData != null) {
 
-                new Thread(() -> {
-                    /* TODO: Write the task data and not simple plain text messages*/
-                    try {
-                        final String txt_msg = "This is ANOTHER simple message\nstored in the file created";
-                        OutputStream os = getContentResolver().openOutputStream(uri);
-                        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os));
-                        bw.write(txt_msg);
-                        bw.flush();
-                        bw.close();
-                        Log.i(TAG, "File successfully created !");
-                    } catch (Throwable t) {
-                        throw new RuntimeException("File processing problem", t);
-                    }
-                }).start();
-            }
+            // The result data contains a URI for the document or directory that the user selected
+            final Uri uri = resultData.getData();
+
+            // Safety check: if for some reason URI is null, abort
+            if (uri == null) return;
+
+            // Create the base HTML content (doctype, head, styles, etc.)
+            StringBuilder htmlData = getStringBuilder();
+
+            // Perform operations on the document using its URI
+            // Run database + file I/O work on a background thread
+            new Thread(() -> {
+                // DB
+                AppDatabase db = MySingleton.getInstance(getApplicationContext()).getDb();
+                // DAO
+                TaskDao taskDao = db.taskDao();
+                // Query all NON-completed tasks using a Cursor
+                Cursor c = taskDao.getNonCompletedTasksWithCursor();
+                // Date formatter for better date output in the file (not long but string->dd/MM/yyyy HH:mm)
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+
+                // Get column indices once
+                int id_index = c.getColumnIndexOrThrow("id");
+                int short_name_index = c.getColumnIndexOrThrow("short_name");
+                int brief_description_index = c.getColumnIndexOrThrow("description");
+                int difficulty_index = c.getColumnIndexOrThrow("difficulty");
+                int date_index = c.getColumnIndexOrThrow("date");
+                int start_time_index = c.getColumnIndexOrThrow("start_time");
+                int duration_index = c.getColumnIndexOrThrow("duration");
+                int location_index = c.getColumnIndexOrThrow("location");
+                int status_index = c.getColumnIndexOrThrow("status");
+
+                // Iterate over all rows of each task
+                while (c.moveToNext()) {
+
+                    // Read each column value from the current row
+                    String id = c.getString(id_index);
+                    String short_name = c.getString(short_name_index);
+                    String brief_description = c.getString(brief_description_index);
+                    String difficulty = c.getString(difficulty_index);
+                    // Convert stored timestamp (long) into Date
+                    long createdAtMillis = c.getLong(date_index);
+                    Date created_at = new MyConverters().longToDate(createdAtMillis);
+                    // and now make it human-readable
+                    String date = sdf.format(created_at);
+                    String start_time = c.getString(start_time_index);
+                    String duration = c.getString(duration_index);
+                    // Location may not be specified so avoid "null" in HTML
+                    String location = c.isNull(location_index) ? "" : c.getString(location_index);
+                    String status = c.getString(status_index);
+
+                    // Append a table row (<tr>) with all task fields
+                    htmlData.append("<tr>")
+                            .append("<td>").append(id).append("</td>")
+                            .append("<td>").append(short_name).append("</td>")
+                            .append("<td>").append(brief_description).append("</td>")
+                            .append("<td>").append(difficulty).append("</td>")
+                            .append("<td>").append(date).append("</td>")
+                            .append("<td>").append(start_time).append("</td>")
+                            .append("<td>").append(duration).append("</td>")
+                            .append("<td>").append(location).append("</td>")
+                            .append("<td>").append(status).append("</td>")
+                            .append("</tr>");
+                }
+
+                // Close the cursor to free resources
+                c.close();
+                // Close table, body, and HTML tags
+                htmlData.append("\n\t</tbody>\n    </table>\n</body>\n</html>");
+
+                try {
+                    OutputStream os = getContentResolver().openOutputStream(uri);
+                    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os));
+                    // Write full HTML content to file
+                    bw.write(htmlData.toString());
+                    bw.flush();
+                    bw.close();
+                    Log.i(TAG, "File successfully created !");
+                } catch (Throwable t) {
+                    throw new RuntimeException("File processing problem", t);
+                }
+            }).start();
         }
     } // END OF onActivityResult(..)
+
+    // This method returns a StringBuilder with the opening HTML structure
+    private static StringBuilder getStringBuilder() {
+        String htmlContent =
+                "<!DOCTYPE html>\n" +
+                        "<html>\n" +
+                        "<head>\n" +
+                        "   <meta charset=\"UTF-8\">\n" +
+                        "   <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
+                        "   <title>Non Completed Tasks</title>\n" +
+                        "   <style>\n" +
+                        "       body { font-family: Arial, sans-serif; padding: 16px; }\n" +
+                        "       table { border-collapse: collapse; width: 100%; border: 2px solid #000; }\n" +
+                        "       th, td { border: 2px solid #000; padding: 10px; text-align: left; }\n" +
+                        "       th { background-color: #f5f5f5; }\n" +
+                        "   </style>\n" +
+                        "</head>\n\n" +
+                        "<body>\n" +
+                        "   <h1 align=\"center\">Non Completed Tasks</h1>\n" +
+                        "   <table>\n" +
+                        "       <thead>\n" +
+                        "           <tr>\n" +
+                        "               <th>ID</th>\n" +
+                        "               <th>SHORT_NAME</th>\n" +
+                        "               <th>DESCRIPTION</th>\n" +
+                        "               <th>DIFFICULTY</th>\n" +
+                        "               <th>CREATED_AT</th>\n" +
+                        "               <th>START_TIME</th>\n" +
+                        "               <th>DURATION</th>\n" +
+                        "               <th>LOCATION</th>\n" +
+                        "               <th>STATUS</th>\n" +
+                        "           </tr>\n" +
+                        "       </thead>\n\n" +
+                        "       <tbody>\n";
+
+        return new StringBuilder(htmlContent);
+    }
 
 }

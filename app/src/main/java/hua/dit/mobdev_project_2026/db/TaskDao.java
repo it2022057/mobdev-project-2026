@@ -33,10 +33,10 @@ public interface TaskDao {
     @Query("SELECT t.id, t.short_name, s.name AS status FROM task t, status s WHERE (t.status_id = s.id) AND (t.status_id != (SELECT id FROM status WHERE name = 'COMPLETED')) ORDER BY CASE WHEN t.status_id = (SELECT id FROM status WHERE name = 'EXPIRED') THEN 1 WHEN t.status_id = (SELECT id FROM status WHERE name = 'IN_PROGRESS') THEN 2 ELSE 3 END")
     public List<TaskWithStatus> getNonCompletedTasks();
 
-    @Query("SELECT t.id, t.short_name, s.name AS status FROM task t, status s WHERE t.status_id = s.id")
-    public List<TaskWithStatus> getTaskWithStatusList();
+    @Query("SELECT t.*, s.name AS status FROM task t, status s WHERE (t.status_id = s.id) AND (t.status_id != (SELECT id FROM status WHERE name = 'COMPLETED')) ORDER BY CASE WHEN t.status_id = (SELECT id FROM status WHERE name = 'EXPIRED') THEN 1 WHEN t.status_id = (SELECT id FROM status WHERE name = 'IN_PROGRESS') THEN 2 ELSE 3 END")
+    public Cursor getNonCompletedTasksWithCursor();
 
     @Query("SELECT t.id, t.short_name, s.name AS status FROM task t, status s WHERE t.status_id = s.id")
-    public Cursor getTaskWithStatusCursor();
+    public List<TaskWithStatus> getTaskWithStatusList();
 
 }
