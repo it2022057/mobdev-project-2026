@@ -67,7 +67,7 @@ public class MyTaskAdapter extends RecyclerView.Adapter<MyTaskViewHolder> {
                 holder.item_icon.setImageResource(R.drawable.ic_expired);
         }
 
-        holder.itemView.setOnClickListener(v -> {
+        holder.itemView.setOnClickListener((v) -> {
             // Adds a subtle click animation to improve user feedback
             animateClick(v);
             Log.i(TAG, "List - Element Selected: " + holder.getAbsoluteAdapterPosition());

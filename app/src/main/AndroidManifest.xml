@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mobdevproject2026">
         <activity
+            android:name=".TaskDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".NewTaskActivity"
             android:exported="false" />
         <activity

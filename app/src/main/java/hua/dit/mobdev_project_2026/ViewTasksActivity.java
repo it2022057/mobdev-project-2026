@@ -184,7 +184,6 @@ public class ViewTasksActivity extends AppCompatActivity {
                             .append("<td>").append(status).append("</td>")
                             .append("</tr>");
                 }
-
                 // Close the cursor to free resources
                 c.close();
                 // Close table, body, and HTML tags

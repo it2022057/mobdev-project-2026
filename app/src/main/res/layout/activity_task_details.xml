@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/task_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".TaskDetailsActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/task_details_activity_header"
+            style="@style/activity_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/task_details_header"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/task_details_activity_header">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="24dp">
+
+                <!-- ID label -->
+                <TextView
+                    android:id="@+id/task_details_activity_id_label"
+                    style="@style/task_details_labels"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Id"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- ID -->
+                <TextView
+                    android:id="@+id/task_details_activity_id"
+                    style="@style/task_details_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/task_details_activity_id_label" />
+
+                <!-- Short name label -->
+                <TextView
+                    android:id="@+id/task_details_activity_name_label"
+                    style="@style/task_details_labels"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Short Name"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/task_details_activity_id" />
+
+                <!-- Short name -->
+                <TextView
+                    android:id="@+id/task_details_activity_name"
+                    style="@style/task_details_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/task_details_activity_name_label" />
+
+                <!-- Description label -->
+                <TextView
+                    android:id="@+id/task_details_activity_description_label"
+                    style="@style/task_details_labels"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Description"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/task_details_activity_name" />
+
+                <!-- Description -->
+                <TextView
+                    android:id="@+id/task_details_activity_description"
+                    style="@style/task_details_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/task_details_activity_description_label" />
+
+                <!-- Difficulty label -->
+                <TextView
+                    android:id="@+id/task_details_activity_difficulty_label"
+                    style="@style/task_details_labels"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Difficulty"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/task_details_activity_description" />
+
+                <!-- Difficulty -->
+                <TextView
+                    android:id="@+id/task_details_activity_difficulty"
+                    style="@style/task_details_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/task_details_activity_difficulty_label" />
+
+                <!-- Date label -->
+                <TextView
+                    android:id="@+id/task_details_activity_date_label"
+                    style="@style/task_details_labels"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Date (timestamp)"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/task_details_activity_difficulty" />
+
+                <!-- Date -->
+                <TextView
+                    android:id="@+id/task_details_activity_date"
+                    style="@style/task_details_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/task_details_activity_date_label" />
+
+                <!-- Start time label -->
+                <TextView
+                    android:id="@+id/task_details_activity_start_time_label"
+                    style="@style/task_details_labels"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Start time"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/task_details_activity_date" />
+
+                <!-- Start time -->
+                <TextView
+                    android:id="@+id/task_details_activity_start_time"
+                    style="@style/task_details_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/task_details_activity_start_time_label" />
+
+                <!-- Duration label -->
+                <TextView
+                    android:id="@+id/task_details_activity_duration_label"
+                    style="@style/task_details_labels"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Duration"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/task_details_activity_start_time" />
+
+                <!-- Duration -->
+                <TextView
+                    android:id="@+id/task_details_activity_duration"
+                    style="@style/task_details_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/task_details_activity_duration_label" />
+
+                <!-- Location label -->
+                <TextView
+                    android:id="@+id/task_details_activity_location_label"
+                    style="@style/task_details_labels"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Location"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/task_details_activity_duration" />
+
+                <!-- Location -->
+                <TextView
+                    android:id="@+id/task_details_activity_location"
+                    style="@style/task_details_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    app:layout_constraintEnd_toStartOf="@id/task_details_activity_button_navigate"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/task_details_activity_location_label" />
+
+                <!-- Navigate button -->
+                <Button
+                    android:id="@+id/task_details_activity_button_navigate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Navigate"
+                    app:layout_constraintBottom_toBottomOf="@id/task_details_activity_location"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/task_details_activity_location" />
+
+                <!-- Status label -->
+                <TextView
+                    android:id="@+id/task_details_activity_status_label"
+                    style="@style/task_details_labels"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Status"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/task_details_activity_location" />
+
+                <!-- Status -->
+                <TextView
+                    android:id="@+id/task_details_activity_status"
+                    style="@style/task_details_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    app:layout_constraintEnd_toStartOf="@id/task_details_activity_mark_as_completed"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/task_details_activity_status_label" />
+
+                <!-- Mark as completed -->
+                <Switch
+                    android:id="@+id/task_details_activity_mark_as_completed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Completed"
+                    android:textColor="@color/completed_icon"
+                    app:layout_constraintBottom_toBottomOf="@id/task_details_activity_status"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/task_details_activity_status" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
