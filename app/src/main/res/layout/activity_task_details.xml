@@ -27,10 +27,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp"
             app:cardUseCompatPadding="true"
@@ -197,7 +193,7 @@
                 <TextView
                     android:id="@+id/task_details_activity_location"
                     style="@style/task_details_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
                     app:layout_constraintEnd_toStartOf="@id/task_details_activity_button_navigate"
@@ -206,14 +202,19 @@
                     app:layout_constraintTop_toBottomOf="@id/task_details_activity_location_label" />
 
                 <!-- Navigate button -->
-                <Button
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/task_details_activity_button_navigate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/task_details_navigate_label"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:contentDescription="@string/task_details_navigate_label"
                     app:layout_constraintBottom_toBottomOf="@id/task_details_activity_location"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/task_details_activity_location" />
+                    app:layout_constraintTop_toTopOf="@id/task_details_activity_location"
+                    app:tint="@color/text_color"
+                    app:srcCompat="@drawable/ic_navigation" />
 
                 <!-- Status label -->
                 <TextView
@@ -239,15 +240,14 @@
                     app:layout_constraintTop_toBottomOf="@id/task_details_activity_status_label" />
 
                 <!-- Mark as completed -->
-                <com.google.android.material.materialswitch.MaterialSwitch
+                <Button
                     android:id="@+id/task_details_activity_mark_as_completed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/task_details_completed_label"
-                    android:textColor="@color/completed_icon"
-                    app:layout_constraintBottom_toBottomOf="@id/task_details_activity_status"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/task_details_activity_status" />
+                    android:textColor="@color/text_color"
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toBottomOf="@+id/task_details_activity_status" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>

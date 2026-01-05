@@ -50,10 +50,9 @@ public class Task {
     private long statusId;
 
     @ColumnInfo
-    @Nullable
-    private String location; // TODO: Make it @Embedded with extra info (i.e. address, state, etc.) or leave it like that
+    private String location;
 
-    public Task(String shortName, String description, int difficulty, Date dateValue, Time startTime, int duration, long statusId, @Nullable String location) {
+    public Task(String shortName, String description, int difficulty, Date dateValue, Time startTime, int duration, long statusId, String location) {
         this.shortName = shortName;
         this.description = description;
         this.difficulty = difficulty;
@@ -128,12 +127,11 @@ public class Task {
         this.statusId = statusId;
     }
 
-    @Nullable
     public String getLocation() {
         return location;
     }
 
-    public void setLocation(@Nullable String location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 

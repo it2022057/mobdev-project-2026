@@ -17,7 +17,6 @@ public class ConfigActivity extends AppCompatActivity {
 
     private static final String TAG = "ConfigActivity";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
