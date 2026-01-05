@@ -49,7 +49,7 @@
                     style="@style/task_details_labels"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Id"
+                    android:text="@string/task_details_id_label"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -69,7 +69,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Short Name"
+                    android:text="@string/task_details_short_name_label"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/task_details_activity_id" />
 
@@ -89,7 +89,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Description"
+                    android:text="@string/task_details_description_label"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/task_details_activity_name" />
 
@@ -109,7 +109,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Difficulty"
+                    android:text="@string/task_details_difficulty_label"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/task_details_activity_description" />
 
@@ -129,7 +129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Date (timestamp)"
+                    android:text="@string/task_details_date_label"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/task_details_activity_difficulty" />
 
@@ -149,7 +149,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Start time"
+                    android:text="@string/task_details_start_time_label"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/task_details_activity_date" />
 
@@ -169,7 +169,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Duration"
+                    android:text="@string/task_details_duration_label"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/task_details_activity_start_time" />
 
@@ -189,7 +189,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Location"
+                    android:text="@string/task_details_location_label"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/task_details_activity_duration" />
 
@@ -210,7 +210,7 @@
                     android:id="@+id/task_details_activity_button_navigate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Navigate"
+                    android:text="@string/task_details_navigate_label"
                     app:layout_constraintBottom_toBottomOf="@id/task_details_activity_location"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/task_details_activity_location" />
@@ -222,7 +222,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Status"
+                    android:text="@string/task_details_status_label"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/task_details_activity_location" />
 
@@ -239,11 +239,11 @@
                     app:layout_constraintTop_toBottomOf="@id/task_details_activity_status_label" />
 
                 <!-- Mark as completed -->
-                <Switch
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/task_details_activity_mark_as_completed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Completed"
+                    android:text="@string/task_details_completed_label"
                     android:textColor="@color/completed_icon"
                     app:layout_constraintBottom_toBottomOf="@id/task_details_activity_status"
                     app:layout_constraintEnd_toEndOf="parent"

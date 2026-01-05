@@ -25,4 +25,15 @@
     <string name="new_task_activity_button1">Save</string>
     <string name="new_task_activity_button2">Cancel</string>
     <string name="task_details_header">Task Details</string>
+    <string name="task_details_id_label">Id</string>
+    <string name="task_details_short_name_label">Short Name</string>
+    <string name="task_details_description_label">Description</string>
+    <string name="task_details_difficulty_label">Difficulty</string>
+    <string name="task_details_date_label">Date (timestamp)</string>
+    <string name="task_details_start_time_label">Start time</string>
+    <string name="task_details_duration_label">Duration</string>
+    <string name="task_details_location_label">Location</string>
+    <string name="task_details_status_label">Status</string>
+    <string name="task_details_navigate_label">Navigate</string>
+    <string name="task_details_completed_label">Completed</string>
 </resources>

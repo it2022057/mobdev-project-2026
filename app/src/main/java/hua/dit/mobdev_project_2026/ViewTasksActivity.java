@@ -74,7 +74,12 @@ public class ViewTasksActivity extends AppCompatActivity {
                 // Set LayoutManager
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 // Attach custom adapter to the recycler view
-                MyTaskAdapter myTaskAdapter = new MyTaskAdapter(nonCompletedTasks);
+                MyTaskAdapter myTaskAdapter = new MyTaskAdapter(nonCompletedTasks, taskId -> {
+                    Intent intent = new Intent(ViewTasksActivity.this, TaskDetailsActivity.class);
+                    intent.putExtra("TASK_ID", taskId);
+                    startActivity(intent);
+                    Log.i(TAG, "Callback activated...Going to view the selected task with id: " + taskId);
+                });
                 recyclerView.setAdapter(myTaskAdapter);
 
                 if (nonCompletedTasks.isEmpty()) {
@@ -90,21 +95,21 @@ public class ViewTasksActivity extends AppCompatActivity {
 
             // Create a Text File in a public Folder (Share it with other Apps) - part 1
             // Create an Intent
-            Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            Intent intent2 = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            intent2.addCategory(Intent.CATEGORY_OPENABLE);
             // HTML file (not plaintext)
-            intent.setType("text/html");
+            intent2.setType("text/html");
             // Add a title
-            intent.putExtra(Intent.EXTRA_TITLE, "tasks.html");
-            startActivityForResult(intent, REQUEST_CODE);
+            intent2.putExtra(Intent.EXTRA_TITLE, "tasks.html");
+            startActivityForResult(intent2, REQUEST_CODE);
         }); // End of download_button.setOnClickListener(...)
 
         // New Task Button Listener
         ImageButton new_task_button = findViewById(R.id.view_tasks_add_button);
         new_task_button.setOnClickListener((v) -> {
             Log.d(TAG, "New task button pressed");
-            Intent intent2 = new Intent(ViewTasksActivity.this, NewTaskActivity.class);
-            startActivity(intent2);
+            Intent intent3 = new Intent(ViewTasksActivity.this, NewTaskActivity.class);
+            startActivity(intent3);
             Log.i(TAG, "Going to a new page to add a new task");
         }); // End of new_task_button.setOnClickListener(...)
     }

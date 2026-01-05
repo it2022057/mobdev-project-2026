@@ -21,8 +21,15 @@ public class MyTaskAdapter extends RecyclerView.Adapter<MyTaskViewHolder> {
 
     private List<TaskWithStatus> taskList;
 
-    public MyTaskAdapter(List<TaskWithStatus> taskList) {
+    private final OnTaskClickListener listener;
+
+    public interface OnTaskClickListener {
+        void onTaskClick(int taskId);
+    }
+
+    public MyTaskAdapter(List<TaskWithStatus> taskList, OnTaskClickListener listener) {
         this.taskList = taskList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -71,6 +78,7 @@ public class MyTaskAdapter extends RecyclerView.Adapter<MyTaskViewHolder> {
             // Adds a subtle click animation to improve user feedback
             animateClick(v);
             Log.i(TAG, "List - Element Selected: " + holder.getAbsoluteAdapterPosition());
+            listener.onTaskClick(task.getId());
         });
     }
 

@@ -25,4 +25,7 @@ public interface StatusDao {
     @Query("SELECT * FROM status WHERE name = :statusName")
     public Status getStatus(String statusName);
 
+    @Query("SELECT name FROM status WHERE id = :statusId")
+    public String getStatusNameById(long statusId);
+
 }
