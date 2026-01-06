@@ -7,19 +7,17 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.materialswitch.MaterialSwitch;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -34,7 +32,15 @@ public class TaskDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "TaskDetailsActivity";
 
+    private static final String KEY_HIDDEN = "KEY_HIDDEN";
+
     private AppDatabase db;
+
+    private TaskDao taskDao;
+
+    private StatusDao statusDao;
+
+    private boolean isMarkAsCompletedHidden = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +65,23 @@ public class TaskDetailsActivity extends AppCompatActivity {
         final TextView location_text = findViewById(R.id.task_details_activity_location);
         final TextView status_text = findViewById(R.id.task_details_activity_status);
 
-        final FloatingActionButton navigate_button = findViewById(R.id.task_details_activity_button_navigate);
+        FloatingActionButton navigate_button = findViewById(R.id.task_details_activity_button_navigate);
+        FloatingActionButton mark_as_completed_button = findViewById(R.id.task_details_activity_mark_as_completed);
 
         // Get the id of the task selected (clicked)
         int taskId = getIntent().getIntExtra("TASK_ID", -1);
         Log.d(TAG, "taskId = " + taskId);
         if (taskId == -1) return;
+
+        // I want the mark_as_completed_button to stay hidden after a configuration change (rotation / theme change), instead of reappearing
+        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_HIDDEN)) {
+            isMarkAsCompletedHidden = savedInstanceState.getBoolean(KEY_HIDDEN, false);
+            Log.d(TAG, "LOADED if mark as Completed is hidden !");
+        }
+
+        if (isMarkAsCompletedHidden) {
+            mark_as_completed_button.setVisibility(View.GONE);
+        }
 
         Handler handler = new Handler(Looper.getMainLooper());
 
@@ -72,8 +89,8 @@ public class TaskDetailsActivity extends AppCompatActivity {
             // DB
             db = MySingleton.getInstance(getApplicationContext()).getDb();
             // DAO's
-            TaskDao taskDao = db.taskDao();
-            StatusDao statusDao = db.statusDao();
+            taskDao = db.taskDao();
+            statusDao = db.statusDao();
 
             Task task = taskDao.getTaskById(taskId);
             String status = statusDao.getStatusNameById(task.getStatusId());
@@ -116,22 +133,21 @@ public class TaskDetailsActivity extends AppCompatActivity {
         }); // End of navigate_button.setOnClickListener(...)
 
         // Mark as Completed Button Listener
-        Button mark_as_completed = findViewById(R.id.task_details_activity_mark_as_completed);
-        mark_as_completed.setOnClickListener((v) -> {
+        mark_as_completed_button.setOnClickListener((v) -> {
             Log.i(TAG, "Mark as completed button pressed !");
             new Thread(() -> {
-                // DB
-                db = MySingleton.getInstance(getApplicationContext()).getDb();
-                // DAO's
-                TaskDao taskDao = db.taskDao();
-                StatusDao statusDao = db.statusDao();
+                taskDao = db.taskDao();
+                statusDao = db.statusDao();
 
-                long newStatusId = statusDao.getStatus("COMPLETED").getId();
+                String newStatusName = "COMPLETED";
+                long newStatusId = statusDao.getStatus(newStatusName).getId();
                 taskDao.updateTaskStatus(taskId, newStatusId);
 
                 handler.post(() -> {
                     // Hide the completed button because there is no reason to press it again
-                    mark_as_completed.setVisibility(View.GONE);
+                    mark_as_completed_button.setVisibility(View.GONE);
+                    isMarkAsCompletedHidden = true;
+                    status_text.setText(newStatusName);
                     Toast.makeText(this, "Status updated", Toast.LENGTH_SHORT).show();
                 });
             }).start();
@@ -140,11 +156,10 @@ public class TaskDetailsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume(){
-        super.onResume();
-        /* TODO: Make onSaveConfigurationChange to not let the button appear again after it got hidden
-        *        and make onResume() change the status text to Completed */
-        Log.d(TAG, "on-resume()...");
-        // put your code here...
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(KEY_HIDDEN, isMarkAsCompletedHidden);
+        // Log
+        Log.d(TAG, "Activity state (isMarkAsCompletedHidden) saved ...");
     }
 }

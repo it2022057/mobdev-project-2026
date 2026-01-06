@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -29,6 +30,7 @@ import java.util.Locale;
 
 import hua.dit.mobdev_project_2026.db.AppDatabase;
 import hua.dit.mobdev_project_2026.db.MyConverters;
+import hua.dit.mobdev_project_2026.db.Task;
 import hua.dit.mobdev_project_2026.db.TaskDao;
 import hua.dit.mobdev_project_2026.db.TaskWithStatus;
 import hua.dit.mobdev_project_2026.list.MyTaskAdapter;
@@ -38,6 +40,12 @@ public class ViewTasksActivity extends AppCompatActivity {
     private static final String TAG = "ViewTasksActivity";
 
     private static final int REQUEST_CODE = 123;
+
+    private AppDatabase db;
+
+    private RecyclerView recyclerView;
+
+    private MyTaskAdapter myTaskAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +65,7 @@ public class ViewTasksActivity extends AppCompatActivity {
         // DB work in background thread
         new Thread(() -> {
             // DB
-            AppDatabase db = MySingleton.getInstance(getApplicationContext()).getDb();
+            db = MySingleton.getInstance(getApplicationContext()).getDb();
             // DAO
             TaskDao taskDao = db.taskDao();
 
@@ -69,11 +77,11 @@ public class ViewTasksActivity extends AppCompatActivity {
             // This change should be made by the MAIN thread
             handler.post(() -> {
                 // Prepare Recycler View
-                RecyclerView recyclerView = findViewById(R.id.recycler_view);
+                recyclerView = findViewById(R.id.recycler_view);
                 // Set LayoutManager
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 // Attach custom adapter to the recycler view
-                MyTaskAdapter myTaskAdapter = new MyTaskAdapter(nonCompletedTasks, taskId -> {
+                myTaskAdapter = new MyTaskAdapter(nonCompletedTasks, taskId -> {
                     Intent intent = new Intent(ViewTasksActivity.this, TaskDetailsActivity.class);
                     intent.putExtra("TASK_ID", taskId);
                     startActivity(intent);
@@ -111,6 +119,27 @@ public class ViewTasksActivity extends AppCompatActivity {
             startActivity(intent3);
             Log.i(TAG, "Going to a new page to add a new task");
         }); // End of new_task_button.setOnClickListener(...)
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "on-resume()...");
+
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        new Thread(() -> {
+            // Gets all the non completed tasks again, so that the UI reloads
+            List<TaskWithStatus> nonCompletedTasks = db.taskDao().getNonCompletedTasks();
+
+            // This change should be made by the MAIN thread
+            handler.post(() -> {
+                // When we go back from the task details page, where we could mark the task as completed,
+                // this activity calls onResume(), so we need to reload the UI to not show the completed task
+                myTaskAdapter.setTaskList(nonCompletedTasks);
+                recyclerView.setAdapter(myTaskAdapter);
+            });
+        }).start();
     }
 
     // Create a Text File in a public Folder (Share it with other Apps) - part 2
