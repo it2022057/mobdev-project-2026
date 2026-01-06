@@ -39,9 +39,9 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
 
-//    // Work Manager Dependencies
-//    val work_version = "2.11.0"
-//    implementation("androidx.work:work-runtime:$work_version")
+    // Work Manager Dependencies
+    val work_version = "2.11.0"
+    implementation("androidx.work:work-runtime:$work_version")
 
     implementation(libs.appcompat)
     implementation(libs.material)

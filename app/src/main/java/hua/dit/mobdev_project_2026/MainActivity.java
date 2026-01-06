@@ -12,10 +12,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import hua.dit.mobdev_project_2026.bg.MyWorker;
 import hua.dit.mobdev_project_2026.db.AppDatabase;
 import hua.dit.mobdev_project_2026.db.Status;
 import hua.dit.mobdev_project_2026.db.StatusDao;
@@ -35,6 +40,17 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         Log.d(TAG, "on-create()...");
+
+        PeriodicWorkRequest workRequest =
+                new PeriodicWorkRequest.Builder(MyWorker.class,
+                        1, TimeUnit.HOURS,
+                        15, TimeUnit.MINUTES)
+                        .build();
+
+        final String workUID = "TASK-PERIODIC-CHECK-123";
+        final ExistingPeriodicWorkPolicy workPolicy = ExistingPeriodicWorkPolicy.UPDATE;
+        WorkManager.getInstance(getApplicationContext())
+                .enqueueUniquePeriodicWork(workUID, workPolicy, workRequest);
 
         // Every time the app starts, we need to initialize the database with predefined status values
         new Thread(() -> {
@@ -77,10 +93,5 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         Log.d(TAG, "on-destroy()");
     }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.d(TAG, "Changed state");
-    }
+    
 }
