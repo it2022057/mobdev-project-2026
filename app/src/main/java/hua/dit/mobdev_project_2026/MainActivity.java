@@ -49,16 +49,16 @@ public class MainActivity extends AppCompatActivity {
         // Executor used to run tasks off the UI thread
         final Executor executor = mySingleton.getExecutorService();
 
-//        PeriodicWorkRequest workRequest =
-//                new PeriodicWorkRequest.Builder(MyWorker.class,
-//                        1, TimeUnit.HOURS,
-//                        15, TimeUnit.MINUTES)
-//                        .build();
-//
-//        final String workUID = "TASK-PERIODIC-CHECK-123";
-//        final ExistingPeriodicWorkPolicy workPolicy = ExistingPeriodicWorkPolicy.UPDATE;
-//        WorkManager.getInstance(getApplicationContext())
-//                .enqueueUniquePeriodicWork(workUID, workPolicy, workRequest);
+        PeriodicWorkRequest workRequest =
+                new PeriodicWorkRequest.Builder(MyWorker.class,
+                        1, TimeUnit.HOURS,
+                        15, TimeUnit.MINUTES)
+                        .build();
+
+        final String workUID = "TASK-PERIODIC-CHECK-123";
+        final ExistingPeriodicWorkPolicy workPolicy = ExistingPeriodicWorkPolicy.KEEP;
+        WorkManager.getInstance(getApplicationContext())
+                .enqueueUniquePeriodicWork(workUID, workPolicy, workRequest);
 
         // Every time the app starts, we need to initialize the database with predefined status values
         executor.execute(() -> {

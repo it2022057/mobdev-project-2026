@@ -15,11 +15,8 @@ public interface TaskDao {
     @Insert
     public Long insertTask(Task task);
 
-    @Update
-    public void updateTask(Task task);
-
-    @Query("DELETE FROM task WHERE id = :taskId")
-    public int deleteTaskById(int taskId);
+    @Query("DELETE FROM task WHERE date < :startOfToday")
+    public int deleteTasksBeforeToday(long startOfToday);
 
     @Query("SELECT * from task")
     public List<Task> getAllTasks();
