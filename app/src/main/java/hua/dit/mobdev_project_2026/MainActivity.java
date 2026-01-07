@@ -2,6 +2,7 @@ package hua.dit.mobdev_project_2026;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -18,6 +19,8 @@ import androidx.work.WorkManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import hua.dit.mobdev_project_2026.bg.MyWorker;
@@ -41,21 +44,26 @@ public class MainActivity extends AppCompatActivity {
         });
         Log.d(TAG, "on-create()...");
 
-        PeriodicWorkRequest workRequest =
-                new PeriodicWorkRequest.Builder(MyWorker.class,
-                        1, TimeUnit.HOURS,
-                        15, TimeUnit.MINUTES)
-                        .build();
+        // Get the application-wide singleton instance
+        final MySingleton mySingleton = MySingleton.getInstance(getApplicationContext());
+        // Executor used to run tasks off the UI thread
+        final Executor executor = mySingleton.getExecutorService();
 
-        final String workUID = "TASK-PERIODIC-CHECK-123";
-        final ExistingPeriodicWorkPolicy workPolicy = ExistingPeriodicWorkPolicy.UPDATE;
-        WorkManager.getInstance(getApplicationContext())
-                .enqueueUniquePeriodicWork(workUID, workPolicy, workRequest);
+//        PeriodicWorkRequest workRequest =
+//                new PeriodicWorkRequest.Builder(MyWorker.class,
+//                        1, TimeUnit.HOURS,
+//                        15, TimeUnit.MINUTES)
+//                        .build();
+//
+//        final String workUID = "TASK-PERIODIC-CHECK-123";
+//        final ExistingPeriodicWorkPolicy workPolicy = ExistingPeriodicWorkPolicy.UPDATE;
+//        WorkManager.getInstance(getApplicationContext())
+//                .enqueueUniquePeriodicWork(workUID, workPolicy, workRequest);
 
         // Every time the app starts, we need to initialize the database with predefined status values
-        new Thread(() -> {
+        executor.execute(() -> {
             // DB
-            AppDatabase db = MySingleton.getInstance(getApplicationContext()).getDb();
+            AppDatabase db = mySingleton.getDb();
             // Status Data
             StatusDao statusDao = db.statusDao();
             if (statusDao.getAllStatus().isEmpty()) {
@@ -68,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 List<Long> statusIds = statusDao.insertAll(statusList);
                 Log.i(TAG, "Status Data - statusIds: " + statusIds.size() + " :: " + statusIds);
             }
-        }).start();
+        });
 
         // See Tasks Button Listener
         Button tasks_button = findViewById(R.id.main_activity_button1);
@@ -93,5 +101,5 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         Log.d(TAG, "on-destroy()");
     }
-    
+
 }

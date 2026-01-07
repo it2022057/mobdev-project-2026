@@ -21,6 +21,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.concurrent.Executor;
 
 import hua.dit.mobdev_project_2026.db.AppDatabase;
 import hua.dit.mobdev_project_2026.db.MyConverters;
@@ -54,7 +55,14 @@ public class TaskDetailsActivity extends AppCompatActivity {
         });
         Log.d(TAG, "on-create()...");
 
-        // // Find views of all the task details
+        // Get the application-wide singleton instance
+        final MySingleton mySingleton = MySingleton.getInstance(getApplicationContext());
+        // Executor used to run tasks off the UI thread
+        final Executor executor = mySingleton.getExecutorService();
+        // Handler used to safely post UI updates from background threads
+        final Handler handler = mySingleton.getHandler();
+
+        // Find views of all the task details
         final TextView id_text = findViewById(R.id.task_details_activity_id);
         final TextView short_name_text = findViewById(R.id.task_details_activity_name);
         final TextView brief_description_text = findViewById(R.id.task_details_activity_description);
@@ -83,11 +91,9 @@ public class TaskDetailsActivity extends AppCompatActivity {
             mark_as_completed_button.setVisibility(View.GONE);
         }
 
-        Handler handler = new Handler(Looper.getMainLooper());
-
-        new Thread(() -> {
+        executor.execute(() -> {
             // DB
-            db = MySingleton.getInstance(getApplicationContext()).getDb();
+            db = mySingleton.getDb();
             // DAO's
             taskDao = db.taskDao();
             statusDao = db.statusDao();
@@ -116,7 +122,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
                 }
                 status_text.setText(status);
             });
-        }).start();
+        });
 
         // Navigate to Location Button Listener
         navigate_button.setOnClickListener((v) -> {
@@ -135,7 +141,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
         // Mark as Completed Button Listener
         mark_as_completed_button.setOnClickListener((v) -> {
             Log.i(TAG, "Mark as completed button pressed !");
-            new Thread(() -> {
+            executor.execute(() -> {
                 taskDao = db.taskDao();
                 statusDao = db.statusDao();
 
@@ -150,7 +156,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
                     status_text.setText(newStatusName);
                     Toast.makeText(this, "Status updated", Toast.LENGTH_SHORT).show();
                 });
-            }).start();
+            });
         }); // End of mark_as_completed.setOnClickListener(...)
 
     }

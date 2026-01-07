@@ -23,10 +23,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.BufferedWriter;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executor;
 
 import hua.dit.mobdev_project_2026.db.AppDatabase;
 import hua.dit.mobdev_project_2026.db.MyConverters;
@@ -42,10 +44,12 @@ public class ViewTasksActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 123;
 
     private AppDatabase db;
-
     private RecyclerView recyclerView;
-
     private MyTaskAdapter myTaskAdapter;
+
+    private MySingleton mySingleton;
+    private Executor executor;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,13 +63,33 @@ public class ViewTasksActivity extends AppCompatActivity {
         });
         Log.d(TAG, "on-create()...");
 
-        // Dictate UI thread to update UI using a Handler
-        Handler handler = new Handler(Looper.getMainLooper());
+        // Get the application-wide singleton instance
+        mySingleton = MySingleton.getInstance(getApplicationContext());
+        // Executor used to run tasks off the UI thread
+        executor = mySingleton.getExecutorService();
+        // Handler used to safely post UI updates from background threads
+        handler = mySingleton.getHandler();
+
+        // Create a custom adapter for the recycler view, with a callback every time the user clicks one task
+        // First we pass an empty list to set the adapter immediately and avoid Log warnings
+        myTaskAdapter = new MyTaskAdapter(new ArrayList<>(), taskId -> {
+            Intent intent = new Intent(ViewTasksActivity.this, TaskDetailsActivity.class);
+            intent.putExtra("TASK_ID", taskId);
+            startActivity(intent);
+            Log.i(TAG, "Callback activated...Going to view the selected task with id: " + taskId);
+        });
+
+        // Prepare Recycler View
+        recyclerView = findViewById(R.id.recycler_view);
+        // Set LayoutManager
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // Attach custom adapter to the recycler view
+        recyclerView.setAdapter(myTaskAdapter);
 
         // DB work in background thread
-        new Thread(() -> {
+        executor.execute(() -> {
             // DB
-            db = MySingleton.getInstance(getApplicationContext()).getDb();
+            db = mySingleton.getDb();
             // DAO
             TaskDao taskDao = db.taskDao();
 
@@ -76,24 +100,13 @@ public class ViewTasksActivity extends AppCompatActivity {
 
             // This change should be made by the MAIN thread
             handler.post(() -> {
-                // Prepare Recycler View
-                recyclerView = findViewById(R.id.recycler_view);
-                // Set LayoutManager
-                recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                // Attach custom adapter to the recycler view
-                myTaskAdapter = new MyTaskAdapter(nonCompletedTasks, taskId -> {
-                    Intent intent = new Intent(ViewTasksActivity.this, TaskDetailsActivity.class);
-                    intent.putExtra("TASK_ID", taskId);
-                    startActivity(intent);
-                    Log.i(TAG, "Callback activated...Going to view the selected task with id: " + taskId);
-                });
-                recyclerView.setAdapter(myTaskAdapter);
+                myTaskAdapter.setTaskList(nonCompletedTasks);
 
                 if (nonCompletedTasks.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "No Urgent Tasks !", Toast.LENGTH_LONG).show();
                 }
             });
-        }).start();
+        });
 
         // Export Tasks Button Listener
         ImageButton download_button = findViewById(R.id.view_tasks_download_button);
@@ -126,20 +139,18 @@ public class ViewTasksActivity extends AppCompatActivity {
         super.onResume();
         Log.d(TAG, "on-resume()...");
 
-        Handler handler = new Handler(Looper.getMainLooper());
-
-        new Thread(() -> {
+        executor.execute(() -> {
             // Gets all the non completed tasks again, so that the UI reloads
-            List<TaskWithStatus> nonCompletedTasks = db.taskDao().getNonCompletedTasks();
+            List<TaskWithStatus> nonCompletedTasks = mySingleton.getDb().taskDao().getNonCompletedTasks();
 
             // This change should be made by the MAIN thread
             handler.post(() -> {
                 // When we go back from the task details page, where we could mark the task as completed,
                 // this activity calls onResume(), so we need to reload the UI to not show the completed task
                 myTaskAdapter.setTaskList(nonCompletedTasks);
-                recyclerView.setAdapter(myTaskAdapter);
+                myTaskAdapter.notifyDataSetChanged(); // used as a last resort...didn't know another efficient way to reload the UI
             });
-        }).start();
+        });
     }
 
     // Create a Text File in a public Folder (Share it with other Apps) - part 2
@@ -164,9 +175,9 @@ public class ViewTasksActivity extends AppCompatActivity {
 
             // Perform operations on the document using its URI
             // Run database + file I/O work on a background thread
-            new Thread(() -> {
+            executor.execute(() -> {
                 // DB
-                AppDatabase db = MySingleton.getInstance(getApplicationContext()).getDb();
+                AppDatabase db = mySingleton.getDb();
                 // DAO
                 TaskDao taskDao = db.taskDao();
                 // Query all NON-completed tasks using a Cursor
@@ -233,7 +244,7 @@ public class ViewTasksActivity extends AppCompatActivity {
                 } catch (Throwable t) {
                     throw new RuntimeException("File processing problem", t);
                 }
-            }).start();
+            });
         }
     } // END OF onActivityResult(..)
 

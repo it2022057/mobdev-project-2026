@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.Executor;
 
 import hua.dit.mobdev_project_2026.db.AppDatabase;
 import hua.dit.mobdev_project_2026.db.MyConverters;
@@ -44,6 +45,13 @@ public class NewTaskActivity extends AppCompatActivity {
             return insets;
         });
         Log.d(TAG, "on-create()...");
+
+        // Get the application-wide singleton instance
+        final MySingleton mySingleton = MySingleton.getInstance(getApplicationContext());
+        // Executor used to run tasks off the UI thread
+        final Executor executor = mySingleton.getExecutorService();
+        // Handler used to safely post UI updates from background threads
+        final Handler handler = mySingleton.getHandler();
 
         // All the input provided by the user in order to create a new task
         final TextInputEditText short_name_input = findViewById(R.id.short_name_input);
@@ -147,13 +155,10 @@ public class NewTaskActivity extends AppCompatActivity {
                 return;
             }
 
-            // Dictate UI thread to update UI using a Handler
-            Handler handler = new Handler(Looper.getMainLooper());
-
             // DB work in background thread
-            new Thread(() -> {
+            executor.execute(() -> {
                 // DB
-                AppDatabase db = MySingleton.getInstance(getApplicationContext()).getDb();
+                AppDatabase db = mySingleton.getDb();
                 // DAOs
                 TaskDao taskDao = db.taskDao();
                 StatusDao statusDao = db.statusDao();
@@ -180,7 +185,7 @@ public class NewTaskActivity extends AppCompatActivity {
                     startActivity(intent);
                     Log.i(TAG, "Back to view tasks page");
                 });
-            }).start();
+            });
         }); // End of save_button.setOnClickListener(...)
 
         // Cancel Button Listener

@@ -92,7 +92,7 @@ public class MyWorker extends Worker {
 //        day.set(Calendar.MILLISECOND, 0);
 //
 //        return day.getTimeInMillis();
-//    }
 
+        return null;
     }
 }
