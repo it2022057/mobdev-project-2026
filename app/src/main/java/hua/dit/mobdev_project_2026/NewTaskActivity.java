@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
@@ -67,7 +66,7 @@ public class NewTaskActivity extends AppCompatActivity {
         duration_input.setText(sp.getInt("default_duration", -1) == -1 ? "" : String.valueOf(sp.getInt("default_duration", -1)));
         difficulty_input.setText(sp.getInt("default_difficulty", -1) == -1 ? "" : String.valueOf(sp.getInt("default_difficulty", -1)));
 
-        // Start time Button Listener (TimePicker pop_up)
+        // Start time Button Listener (TimePicker pop-up)
         start_time_input.setOnClickListener((v) -> {
             // Show TimePickerDialog and Handle "OK" (time set) button
             new TimePickerDialogFragment().show(getSupportFragmentManager(), "Start Time");
@@ -119,7 +118,7 @@ public class NewTaskActivity extends AppCompatActivity {
             if (difficulty == -1) {
                 ok = false;
                 Toast.makeText(getApplicationContext(), "Difficulty input INVALID !", Toast.LENGTH_SHORT).show();
-                // Exceeded value 10
+            // Exceeded value 10
             } else if (difficulty == -3) {
                 ok = false;
                 Toast.makeText(getApplicationContext(), "Difficulty must not be > 10 !", Toast.LENGTH_SHORT).show();

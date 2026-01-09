@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     tools:context=".MainActivity">
 
+    <!-- Title of the application (main header) -->
     <TextView
         style="@style/activity_header"
         android:id="@+id/main_header"
@@ -17,6 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Subheader -->
     <TextView
         style="@style/activity_subheader"
         android:id="@+id/subheader"
@@ -27,6 +29,7 @@
         app:layout_constraintStart_toStartOf="@+id/main_header"
         app:layout_constraintTop_toBottomOf="@+id/main_header" />
 
+    <!-- See tasks button -->
     <Button
         android:id="@+id/main_activity_button1"
         android:layout_height="wrap_content"
@@ -37,6 +40,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/subheader" />
 
+    <!-- Configuration Button (icon instead of text) -->
     <ImageButton
         android:background="@android:color/transparent"
         android:contentDescription="@string/main_activity_button2_label"

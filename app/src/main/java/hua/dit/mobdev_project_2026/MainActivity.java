@@ -2,13 +2,11 @@ package hua.dit.mobdev_project_2026;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -20,7 +18,6 @@ import androidx.work.WorkManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import hua.dit.mobdev_project_2026.bg.MyWorker;
@@ -49,12 +46,15 @@ public class MainActivity extends AppCompatActivity {
         // Executor used to run tasks off the UI thread
         final Executor executor = mySingleton.getExecutorService();
 
+        // Periodic background work: Runs every 1 hour anytime
+        // from minute 45 to minute 60 (15 min flex) to update task status
         PeriodicWorkRequest workRequest =
                 new PeriodicWorkRequest.Builder(MyWorker.class,
                         1, TimeUnit.HOURS,
                         15, TimeUnit.MINUTES)
                         .build();
 
+        // Enqueue unique periodic work
         final String workUID = "TASK-PERIODIC-CHECK-123";
         final ExistingPeriodicWorkPolicy workPolicy = ExistingPeriodicWorkPolicy.KEEP;
         WorkManager.getInstance(getApplicationContext())
@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         // App Config Button Listener
         ImageButton app_config_button = findViewById(R.id.main_activity_button2);
         app_config_button.setOnClickListener((v) -> {
+            Log.d(TAG, "Pressed the Configuration button");
             Intent intent2 = new Intent(MainActivity.this, ConfigActivity.class);
             startActivity(intent2);
             Log.i(TAG, "Going to the app's configuration page");

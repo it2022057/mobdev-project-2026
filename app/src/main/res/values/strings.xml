@@ -1,18 +1,28 @@
 <resources>
+    <!-- MainActivity -->
     <string name="app_name">mobdev-project-2026</string>
     <string name="main_header">LoukIt !</string>
     <string name="main_subheader">Your Daily Task Manager</string>
     <string name="main_activity_button1_label">See your tasks</string>
     <string name="main_activity_button2_label">Config</string>
+    <!-- End of MainActivity -->
+
+    <!-- ConfigActivity -->
     <string name="config_header">App Config</string>
     <string name="config_label1">Duration:</string>
     <string name="config_label2">Difficulty:</string>
     <string name="duration_hint">1,2,3,…</string>
     <string name="difficulty_hint">[0,10] easy to difficult</string>
     <string name="config_button">Save</string>
+    <!-- End of ConfigActivity -->
+
+    <!-- ViewTasksActivity -->
     <string name="view_tasks_header">Tasks</string>
-    <string name="view_tasks_image_button_label1">Add task</string>
+    <string name="view_tasks_image_button_label1">Export tasks</string>
     <string name="view_tasks_image_button_label2">Add task</string>
+    <!-- End of ViewTasksActivity -->
+
+    <!-- NewTaskActivity -->
     <string name="new_task_header">Task Details</string>
     <string name="short_name_hint">Short Name</string>
     <string name="brief_description_hint">Brief Description</string>
@@ -24,6 +34,9 @@
     <string name="location_helper_text">(optional)</string>
     <string name="new_task_activity_button1">Save</string>
     <string name="new_task_activity_button2">Cancel</string>
+    <!-- End of NewTaskActivity -->
+
+    <!-- TaskDetailsActivity -->
     <string name="task_details_header">Task Details</string>
     <string name="task_details_id_label">Id</string>
     <string name="task_details_short_name_label">Short Name</string>
@@ -36,4 +49,6 @@
     <string name="task_details_status_label">Status</string>
     <string name="task_details_navigate_label">Navigate</string>
     <string name="task_details_completed_label">Completed</string>
+    <!-- End of TaskDetailsActivity -->
+
 </resources>

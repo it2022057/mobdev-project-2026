@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -73,6 +72,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
         final TextView location_text = findViewById(R.id.task_details_activity_location);
         final TextView status_text = findViewById(R.id.task_details_activity_status);
 
+        // Navigate and mark as completed buttons (with icons)
         FloatingActionButton navigate_button = findViewById(R.id.task_details_activity_button_navigate);
         FloatingActionButton mark_as_completed_button = findViewById(R.id.task_details_activity_mark_as_completed);
 
@@ -86,21 +86,23 @@ public class TaskDetailsActivity extends AppCompatActivity {
             isMarkAsCompletedHidden = savedInstanceState.getBoolean(KEY_HIDDEN, false);
             Log.d(TAG, "LOADED if mark as Completed is hidden !");
         }
-
+        // If it was hidden before the configuration change, hide it again
         if (isMarkAsCompletedHidden) {
             mark_as_completed_button.setVisibility(View.GONE);
         }
 
+        // Load task details from DB in background thread
         executor.execute(() -> {
             // DB
             db = mySingleton.getDb();
-            // DAO's
+            // DAOs
             taskDao = db.taskDao();
             statusDao = db.statusDao();
 
             Task task = taskDao.getTaskById(taskId);
             String status = statusDao.getStatusNameById(task.getStatusId());
 
+            // Update UI on main thread
             handler.post(() -> {
                 // Fill UI dynamically with the appropriate task values
                 id_text.setText(String.valueOf(task.getId()));
@@ -124,7 +126,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
             });
         });
 
-        // Navigate to Location Button Listener
+        // Open location in Google Maps Button Listener
         navigate_button.setOnClickListener((v) -> {
             Log.d(TAG, "Pressed the navigate button");
 
@@ -138,10 +140,11 @@ public class TaskDetailsActivity extends AppCompatActivity {
             startActivity(intent);
         }); // End of navigate_button.setOnClickListener(...)
 
-        // Mark as Completed Button Listener
+        // Mark task as COMPLETED Button Listener
         mark_as_completed_button.setOnClickListener((v) -> {
             Log.i(TAG, "Mark as completed button pressed !");
             executor.execute(() -> {
+                // DAOs
                 taskDao = db.taskDao();
                 statusDao = db.statusDao();
 
@@ -164,8 +167,8 @@ public class TaskDetailsActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        // Persist mark as completed button's hidden state
         outState.putBoolean(KEY_HIDDEN, isMarkAsCompletedHidden);
-        // Log
         Log.d(TAG, "Activity state (isMarkAsCompletedHidden) saved ...");
     }
 }

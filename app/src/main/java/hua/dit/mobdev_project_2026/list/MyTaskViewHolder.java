@@ -15,6 +15,7 @@ public class MyTaskViewHolder extends RecyclerView.ViewHolder {
     TextView item_short_name, item_status;
     ImageView item_icon;
 
+    // Binds layout views to variables
     public MyTaskViewHolder(@NonNull View itemView) {
         super(itemView);
         item_id = itemView.findViewById(R.id.item_id);

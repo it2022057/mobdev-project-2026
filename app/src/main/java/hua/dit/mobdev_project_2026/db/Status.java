@@ -16,10 +16,12 @@ public class Status {
     // i.e. "Recorded", "In progress", "Completed", "Expired"
     private String name;
 
+    // Constructor
     public Status(@NonNull String name) {
         this.name = name;
     }
 
+    // Getters and Setters
     public long getId() {
         return id;
     }

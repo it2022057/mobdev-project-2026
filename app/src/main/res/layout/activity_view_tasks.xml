@@ -14,6 +14,7 @@
         android:orientation="vertical"
         tools:context=".ViewTasksActivity">
 
+        <!-- Main header-->
         <TextView
             android:id="@+id/view_tasks_activity_header"
             style="@style/activity_header"
@@ -24,6 +25,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- RecyclerView -> Displays the list of non-completed tasks retrieved from the Room database -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
@@ -36,6 +38,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_tasks_activity_header" />
 
+        <!-- Download ImageButton (export tasks in HTML) -->
         <ImageButton
             android:id="@+id/view_tasks_download_button"
             android:layout_width="wrap_content"
@@ -48,6 +51,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recycler_view" />
 
+        <!-- New Task ImageButton -->
         <ImageButton
             android:id="@+id/view_tasks_add_button"
             android:layout_width="wrap_content"

@@ -14,7 +14,6 @@ import hua.dit.mobdev_project_2026.db.AppDatabase;
 
 public class MySingleton {
 
-
     private static volatile MySingleton instance;
 
     private final AppDatabase db;
@@ -24,22 +23,25 @@ public class MySingleton {
     private MySingleton(Context context) {
         // DB
         db = Room.databaseBuilder(context, AppDatabase.class, "app-database.sqlite").build();
-        // Executor - Threads Pool
+        // Fixed thread pool for DB and background operations
         this.executorService =
                 Executors.newFixedThreadPool(4);
-        // Handler - Main Thread "TODOs" List
+        // Main thread handler for UI updates
         this.handler =
                 HandlerCompat.createAsync(Looper.getMainLooper());
     }
 
+    // Returns database instance
     public AppDatabase getDb() {
         return db;
     }
 
+    // Returns executor service
     public ExecutorService getExecutorService() {
         return executorService;
     }
 
+    // Returns main-thread handler
     public Handler getHandler() {
         return handler;
     }
@@ -50,6 +52,7 @@ public class MySingleton {
         }
     }
 
+    // Thread-safe singleton access that saves resources
     public static MySingleton getInstance(Context context) {
         if (instance == null) {
             synchronized (MySingleton.class) {

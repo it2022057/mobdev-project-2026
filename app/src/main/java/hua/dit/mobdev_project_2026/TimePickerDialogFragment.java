@@ -11,8 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.google.android.material.textfield.TextInputEditText;
-
 import java.util.Calendar;
 
 public class TimePickerDialogFragment extends DialogFragment implements android.app.TimePickerDialog.OnTimeSetListener {
@@ -25,7 +23,7 @@ public class TimePickerDialogFragment extends DialogFragment implements android.
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        // Use the current time as the default values for the picker.
+        // Use the current time as the default values for the picker
         final Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
@@ -37,12 +35,14 @@ public class TimePickerDialogFragment extends DialogFragment implements android.
 
     @Override
     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-        /* TODO: Do something with the date the user provides */
         Log.i(TAG, "Selected Time: hourOfDay= " + hourOfDay + ":" + minute);
+
+        // Package result in a Bundle
         Bundle result = new Bundle();
         result.putInt(HOUR_KEY, hourOfDay);
         result.putInt(MINUTE_KEY, minute);
 
+        // Send result back to NewTaskActivity
         getParentFragmentManager().setFragmentResult(RESULT_KEY, result);
     }
 }

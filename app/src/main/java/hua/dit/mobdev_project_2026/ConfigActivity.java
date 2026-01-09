@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,26 +44,44 @@ public class ConfigActivity extends AppCompatActivity {
         save_config_button.setOnClickListener((v) -> {
             Log.d(TAG, "Pressed Save");
             String tmp = default_duration.getText().toString().trim(); // value of Duration EditText
+            boolean ok = true;
 
             // Get new Duration
-            int new_default_duration = tmp.isEmpty() ? -1 : Integer.parseInt(tmp); // if the user didn't type anything put a non valid value (-1)
+            int new_default_duration;
+            if (tmp.isEmpty()) {
+                // if the user didn't type anything put a non valid value (-1)
+                new_default_duration = -1;
+            } else if ((new_default_duration = Integer.parseInt(tmp)) > 24 || new_default_duration < 0) {
+                Toast.makeText(getApplicationContext(), "Duration input INVALID !", Toast.LENGTH_LONG).show();
+                ok = false;
+            }
 
             tmp = default_difficulty.getText().toString().trim(); // value of Difficulty EditText
 
             // Get new Difficulty
-            int new_default_difficulty = tmp.isEmpty() ? -1 : Integer.parseInt(tmp); // if the user didn't type anything put a non valid value (-1)
+            int new_default_difficulty;
+            if (tmp.isEmpty()) {
+                // if the user didn't type anything put a non valid value (-1)
+                new_default_difficulty = -1;
+            } else if ((new_default_difficulty = Integer.parseInt(tmp)) > 10) {
+                Toast.makeText(getApplicationContext(), "Difficulty must not be > 10 !", Toast.LENGTH_LONG).show();
+                ok = false;
+            }
 
-            // Store new Duration and Difficulty in Shared Preferences
-            SharedPreferences.Editor editor = sp.edit();
-            editor.putInt("default_duration", new_default_duration);
-            editor.putInt("default_difficulty", new_default_difficulty);
-            editor.apply();
-            Log.d(TAG, "Updated the Shared Preferences of the app");
+            // If either input is invalid, stay in the same page and do not update the Shared Preferences
+            if (ok) {
+                // Store new Duration and Difficulty in Shared Preferences
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putInt("default_duration", new_default_duration);
+                editor.putInt("default_difficulty", new_default_difficulty);
+                editor.apply();
+                Log.d(TAG, "Updated the Shared Preferences of the app");
 
-            // Go back
-            Intent intent = new Intent(ConfigActivity.this, MainActivity.class);
-            startActivity(intent);
-            Log.i(TAG, "Going back to MainActivity");
+                // Go back
+                Intent intent = new Intent(ConfigActivity.this, MainActivity.class);
+                startActivity(intent);
+                Log.i(TAG, "Going back to MainActivity");
+            }
         }); // End of save_config_button.setOnClickListener(..)
     }
 }

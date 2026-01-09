@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Activity Header Style -->
     <style name="activity_header" parent="TextAppearance.AppCompat">
         <item name="android:textSize">36sp</item>
         <item name="android:fontFamily">@font/fuzzy_bubbles</item>
@@ -8,6 +9,7 @@
         <item name="android:layout_marginTop">40dp</item>
     </style>
 
+    <!-- Activity Subheader Style -->
     <style name="activity_subheader" parent="TextAppearance.AppCompat">
         <item name="android:textSize">10sp</item>
         <item name="android:fontFamily">casual</item>
@@ -15,6 +17,7 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <!-- Configuration Activity Label Style -->
     <style name="activity_config_text" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/lora</item>
         <item name="android:gravity">center_vertical</item>
@@ -24,6 +27,7 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <!-- Task Input Field Style -->
     <style name="task_input" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
         <item name="shapeAppearance">@style/rounded</item>
         <item name="android:layout_width">match_parent</item>
@@ -31,11 +35,13 @@
         <item name="android:layout_marginTop">16dp</item>
     </style>
 
+    <!--  Rounded Shape Appearance for TextInputLayout -->
     <style name="rounded" parent="ShapeAppearance.MaterialComponents.MediumComponent">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">16dp</item>
     </style>
 
+    <!-- Task Details Activity Label Style -->
     <style name="task_details_labels" parent="TextAppearance.AppCompat">
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/text_color</item>
@@ -43,6 +49,7 @@
         <item name="android:background">@color/white</item>
     </style>
 
+    <!-- Task Details Activity Text Style -->
     <style name="task_details_text" parent="TextAppearance.AppCompat">
         <item name="android:layout_marginTop">6dp</item>
         <item name="android:textSize">16sp</item>

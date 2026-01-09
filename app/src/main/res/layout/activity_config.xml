@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         tools:context=".ConfigActivity">
 
+        <!-- Title (main header) -->
         <TextView
             android:id="@+id/config_activity_header"
             style="@style/activity_header"
@@ -23,6 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- First input section -> Default Task Duration -->
         <LinearLayout
             android:id="@+id/config_activity_linear1"
             android:layout_width="match_parent"
@@ -32,6 +34,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/config_activity_header">
 
+            <!-- Label for task duration input -->
             <TextView
                 android:id="@+id/config_activity_duration_text"
                 style="@style/activity_config_text"
@@ -42,6 +45,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/config_activity_header" />
 
+            <!-- EditText for entering default task duration.
+                 Accepts only numeric input and limits the input
+                 length to 2 digits for validation purposes -->
             <EditText
                 android:id="@+id/config_activity_duration_input"
                 android:layout_width="match_parent"
@@ -55,6 +61,7 @@
                 android:maxLength="2" />
         </LinearLayout>
 
+        <!-- Second input section -> Default Task Difficulty -->
         <LinearLayout
             android:id="@+id/config_activity_linear2"
             android:layout_width="match_parent"
@@ -64,6 +71,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/config_activity_linear1">
 
+            <!-- Label for task difficulty input -->
             <TextView
                 android:id="@+id/config_activity_difficulty_text"
                 style="@style/activity_config_text"
@@ -74,6 +82,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/config_activity_header" />
 
+            <!-- EditText for entering default task difficulty.
+                 Numeric input is enforced to maintain data integrity -->
             <EditText
                 android:id="@+id/config_activity_difficulty_input"
                 android:layout_width="match_parent"
@@ -87,6 +97,7 @@
                 android:maxLength="2" />
         </LinearLayout>
 
+        <!-- Save Button -->
         <Button
             android:id="@+id/config_activity_button"
             android:layout_width="wrap_content"

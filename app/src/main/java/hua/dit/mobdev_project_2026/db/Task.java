@@ -1,10 +1,8 @@
 package hua.dit.mobdev_project_2026.db;
 
 import androidx.annotation.IntRange;
-import androidx.annotation.Nullable;
 import androidx.annotation.Size;
 import androidx.room.ColumnInfo;
-import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
@@ -15,9 +13,9 @@ import java.util.Date;
 
 @Entity(foreignKeys = {
         @ForeignKey(
-                entity = Status.class,
-                parentColumns = {"id"},
-                childColumns = {"status_id"})
+                entity = Status.class,          // Parent table
+                parentColumns = {"id"},         // Primary key in Status
+                childColumns = {"status_id"})   // Foreign key in Task
         }, indices = { @Index("status_id") } )
 public class Task {
 
@@ -43,7 +41,7 @@ public class Task {
     private Time startTime;
 
     @ColumnInfo
-    @IntRange(from = 1)
+    @IntRange(from = 1, to = 24)
     private int duration;
 
     @ColumnInfo(name = "status_id")
@@ -52,6 +50,7 @@ public class Task {
     @ColumnInfo
     private String location;
 
+    // Constructor
     public Task(String shortName, String description, int difficulty, Date dateValue, Time startTime, int duration, long statusId, String location) {
         this.shortName = shortName;
         this.description = description;
@@ -63,6 +62,7 @@ public class Task {
         this.location = location;
     }
 
+    // Getters and Setters
     public long getId() {
         return id;
     }

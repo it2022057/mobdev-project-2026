@@ -6,10 +6,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -32,7 +30,6 @@ import java.util.concurrent.Executor;
 
 import hua.dit.mobdev_project_2026.db.AppDatabase;
 import hua.dit.mobdev_project_2026.db.MyConverters;
-import hua.dit.mobdev_project_2026.db.Task;
 import hua.dit.mobdev_project_2026.db.TaskDao;
 import hua.dit.mobdev_project_2026.db.TaskWithStatus;
 import hua.dit.mobdev_project_2026.list.MyTaskAdapter;
@@ -44,7 +41,6 @@ public class ViewTasksActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 123;
 
     private AppDatabase db;
-    private RecyclerView recyclerView;
     private MyTaskAdapter myTaskAdapter;
 
     private MySingleton mySingleton;
@@ -80,7 +76,7 @@ public class ViewTasksActivity extends AppCompatActivity {
         });
 
         // Prepare Recycler View
-        recyclerView = findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
         // Set LayoutManager
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         // Attach custom adapter to the recycler view

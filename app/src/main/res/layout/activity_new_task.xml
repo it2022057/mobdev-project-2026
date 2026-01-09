@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         tools:context=".NewTaskActivity">
 
-        <!-- Header -->
+        <!-- Main Header -->
         <TextView
             android:id="@+id/new_task_activity_header"
             style="@style/activity_header"
@@ -24,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Short Name (max 20) -->
+        <!-- Short Name input (max 20) -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/short_name_layout"
             style="@style/task_input"
@@ -44,7 +44,7 @@
                 android:maxLength="20" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Brief Description (max 150) -->
+        <!-- Brief Description input (max 150) -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/brief_description_layout"
             style="@style/task_input"
@@ -66,7 +66,7 @@
                 android:gravity="top" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Difficulty [0,10] -> 0: very easy task, 10: very difficult task -->
+        <!-- Difficulty input [0,10] -> 0: very easy task, 10: very difficult task -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/difficulty_layout"
             style="@style/task_input"
@@ -87,7 +87,7 @@
                 android:maxLength="2" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Start Time (hours & minutes using TimePicker) -->
+        <!-- Start Time input (hours & minutes using TimePicker) -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/start_time_layout"
             style="@style/task_input"
@@ -107,7 +107,7 @@
                 android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Duration (hours) -->
+        <!-- Duration input (hours) -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/duration_layout"
             style="@style/task_input"
@@ -128,7 +128,7 @@
                 android:maxLength="2" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Location (optional) -->
+        <!-- Location input (optional) -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/location_layout"
             style="@style/task_input"
@@ -146,7 +146,7 @@
                 android:imeOptions="actionDone" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Buttons -->
+        <!-- Save Button -->
         <Button
             android:id="@+id/new_task_activity_save_button"
             android:layout_width="110dp"
@@ -158,6 +158,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/location_layout" />
 
+        <!-- Cancel Button -->
         <Button
             android:id="@+id/new_task_activity_cancel_button"
             android:layout_width="110dp"

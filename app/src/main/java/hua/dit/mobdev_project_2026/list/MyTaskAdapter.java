@@ -21,12 +21,15 @@ public class MyTaskAdapter extends RecyclerView.Adapter<MyTaskViewHolder> {
 
     private List<TaskWithStatus> taskList;
 
+    // Callback listener for item click handling
     private final OnTaskClickListener listener;
 
+    // Interface used to notify the parent component about item clicks
     public interface OnTaskClickListener {
         void onTaskClick(int taskId);
     }
 
+    // Constructor
     public MyTaskAdapter(List<TaskWithStatus> taskList, OnTaskClickListener listener) {
         this.taskList = taskList;
         this.listener = listener;
@@ -44,11 +47,13 @@ public class MyTaskAdapter extends RecyclerView.Adapter<MyTaskViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull MyTaskViewHolder holder, int position) {
         TaskWithStatus task = taskList.get(position);
+
         holder.item_id.setText(String.valueOf(task.getId()));
         holder.item_short_name.setText(task.getShortName());
         holder.item_status.setText(task.getStatus());
 
-        switch (holder.item_status.getText().toString().trim()) {
+        // Change icon and color based on task status
+        switch (task.getStatus()) {
             case "RECORDED":
                 holder.item_status.setTextColor(
                         ContextCompat.getColor(holder.itemView.getContext(), R.color.recorded_icon)
@@ -74,6 +79,7 @@ public class MyTaskAdapter extends RecyclerView.Adapter<MyTaskViewHolder> {
                 holder.item_icon.setImageResource(R.drawable.ic_expired);
         }
 
+        // Handle item click
         holder.itemView.setOnClickListener((v) -> {
             // Adds a subtle click animation to improve user feedback
             animateClick(v);
@@ -95,6 +101,7 @@ public class MyTaskAdapter extends RecyclerView.Adapter<MyTaskViewHolder> {
         this.taskList = taskList;
     }
 
+    // Simple click animation for better UX
     private void animateClick(View view) {
         view.animate()
                 .scaleX(0.97f)
