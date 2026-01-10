@@ -12,12 +12,14 @@ public class TaskWithStatus {
 
     private String status;
 
+    // Constructor
     public TaskWithStatus(int id, String shortName, String status) {
         this.id = id;
         this.shortName = shortName;
         this.status = status;
     }
 
+    // Getters and Setters
     public int getId() {
         return id;
     }

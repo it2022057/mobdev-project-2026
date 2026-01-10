@@ -208,7 +208,7 @@ public class ViewTasksActivity extends AppCompatActivity {
                     String start_time = c.getString(start_time_index);
                     String duration = c.getString(duration_index);
                     // Location may not be specified so avoid "null" in HTML
-                    String location = c.isNull(location_index) ? "" : c.getString(location_index);
+                    String location = c.getString(location_index).isEmpty() ? "(not specified)" : c.getString(location_index);
                     String status = c.getString(status_index);
 
                     // Append a table row (<tr>) with all task fields
