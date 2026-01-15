@@ -5,6 +5,7 @@
     <string name="main_subheader">Your Daily Task Manager</string>
     <string name="main_activity_button1_label">See your tasks</string>
     <string name="main_activity_button2_label">Config</string>
+    <string name="main_activity_button3_label">Test DB Content Provider</string>
     <!-- End of MainActivity -->
 
     <!-- ConfigActivity -->

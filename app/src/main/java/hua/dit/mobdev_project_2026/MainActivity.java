@@ -95,6 +95,14 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent2);
             Log.i(TAG, "Going to the app's configuration page");
         }); // End of app_config_button.setOnClickListener(...)
+
+        // Test DB Content Provider Button Listener
+        ImageButton test_db_content_provider_button = findViewById(R.id.main_activity_button3);
+        test_db_content_provider_button.setOnClickListener((v) -> {
+            Log.d(TAG, "Pressed the Database button");
+            /* TODO: Make Logs with ContentValues and ContentResolver */
+        }); // End of test_db_content_provider_button.setOnClickListener(...)
+
     }
 
     @Override

@@ -77,7 +77,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
         FloatingActionButton mark_as_completed_button = findViewById(R.id.task_details_activity_mark_as_completed);
 
         // Get the id of the task selected (clicked)
-        int taskId = getIntent().getIntExtra("TASK_ID", -1);
+        long taskId = getIntent().getIntExtra("TASK_ID", -1);
         Log.d(TAG, "taskId = " + taskId);
         if (taskId == -1) return;
 

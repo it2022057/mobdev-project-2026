@@ -93,7 +93,7 @@ public class MyContentProvider extends ContentProvider {
     @Override
     public String getType(@NonNull Uri uri) {
 
-        switch (uriMatcher.match(uri) ) {
+        switch (uriMatcher.match(uri)) {
             case URI_CODE_1:
                 return "vnd.android.cursor.dir/task";
             case URI_CODE_2:
@@ -105,11 +105,30 @@ public class MyContentProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        throw new UnsupportedOperationException("Not yet implemented");
+
+        switch (uriMatcher.match(uri)) {
+            case URI_CODE_2:
+                long row = ContentUris.parseId(uri);
+                Task task = db.taskDao().getTaskById(row);
+                return db.taskDao().updateTask(task);
+            case URI_CODE_1:
+                throw new UnsupportedOperationException("Cannot update a list of tasks !");
+            default:
+                throw new RuntimeException("Update Method - Not supported URI: " + uri);
+        }
     }
 
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        switch (uriMatcher.match(uri)) {
+            case URI_CODE_2:
+                long row = ContentUris.parseId(uri);
+                Task task = db.taskDao().getTaskById(row);
+                return db.taskDao().deleteTask(task);
+            case URI_CODE_1:
+                throw new UnsupportedOperationException("Cannot delete a list of tasks !");
+            default:
+                throw new RuntimeException("Delete Method - Not supported URI: " + uri);
+        }
     }
 }
