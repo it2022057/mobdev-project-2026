@@ -177,7 +177,7 @@ public class ViewTasksActivity extends AppCompatActivity {
                 // DAO
                 TaskDao taskDao = db.taskDao();
                 // Query all NON-completed tasks using a Cursor
-                Cursor c = taskDao.getNonCompletedTasksWithCursor();
+                Cursor c = taskDao.getNonCompletedTasksCursor();
                 // Date formatter for better date output in the file (not long but string->dd/MM/yyyy HH:mm)
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
 

@@ -11,6 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Mobdevproject2026">
+
+        <provider
+            android:name=".MyContentProvider"
+            android:authorities="hua.dit.mobdev_project_2026.my_provider"
+            android:enabled="true"
+            android:exported="true"/>
+
         <activity
             android:name=".TaskDetailsActivity"
             android:exported="false" />
