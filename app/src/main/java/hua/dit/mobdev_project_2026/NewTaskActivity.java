@@ -162,7 +162,7 @@ public class NewTaskActivity extends AppCompatActivity {
                 TaskDao taskDao = db.taskDao();
                 StatusDao statusDao = db.statusDao();
 
-                // Default status for a newly created Task is "RECORDED".
+                // Default status for a newly created Task is "RECORDED"
                 long status_id = statusDao.getStatus("RECORDED").getId();
                 // Creates a new task object to insert later on in the DB
                 Task task = new Task(short_name, brief_description, difficulty, new Date(), new MyConverters().stringToTime(start_time), duration, status_id, location);

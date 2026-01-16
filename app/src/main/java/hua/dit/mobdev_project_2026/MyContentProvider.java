@@ -14,7 +14,6 @@ import java.util.Date;
 
 import hua.dit.mobdev_project_2026.db.AppDatabase;
 import hua.dit.mobdev_project_2026.db.MyConverters;
-import hua.dit.mobdev_project_2026.db.Status;
 import hua.dit.mobdev_project_2026.db.Task;
 
 public class MyContentProvider extends ContentProvider {
@@ -28,8 +27,9 @@ public class MyContentProvider extends ContentProvider {
 
     /* Helper - UriMatcher */
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-    private static final int URI_CODE_1 = 1;
-    private static final int URI_CODE_2 = 2;
+    private static final int URI_CODE_1 = 1; // task (many rows)
+    private static final int URI_CODE_2 = 2; // task/# (single row)
+
     static {
         uriMatcher.addURI(MY_PROVIDER, "task", URI_CODE_1);
         uriMatcher.addURI(MY_PROVIDER, "task/#", URI_CODE_2);
@@ -48,26 +48,27 @@ public class MyContentProvider extends ContentProvider {
 
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
-        Log.d(TAG, "Insert Data: uri=" + uri + " , values=" + values);
+        Log.d(TAG, "Insert Data: uri=" + uri + " , values → " + values);
+
         if (uriMatcher.match(uri) == URI_CODE_1) {
+            // Extract fields from ContentValues
             String shortName = values.getAsString("shortName");
             String briefDescription = values.getAsString("briefDescription");
             int difficulty = values.getAsInteger("difficulty");
             String startTime = values.getAsString("startTime");
             int duration = values.getAsInteger("duration");
-            String statusName = values.getAsString("statusName");
             String location = values.getAsString("location");
 
-            // Find Status ID
-            Status status = db.statusDao().getStatus(statusName);
-            if (status == null)
-                throw new RuntimeException("statusName = " + statusName + " not found !");
+            // Default status for a newly created Task is "RECORDED".
+            long statusId = db.statusDao().getStatus("RECORDED").getId();
 
-            Task task = new Task(shortName, briefDescription, difficulty, new Date(), new MyConverters().stringToTime(startTime), duration, status.getId(), location);
+            Task task = new Task(shortName, briefDescription, difficulty, new Date(), new MyConverters().stringToTime(startTime), duration, statusId, location);
 
-            // Insert Data and Return Row URI
+            // Insert data and return row URI
             long task_id = db.taskDao().insertTask(task);
             Log.i(TAG, "Insert Data: NEW Task ID: " + task_id);
+
+            // Return URI pointing to the newly created row
             return ContentUris.withAppendedId(CONTENT_URI, task_id);
         }
 
@@ -78,11 +79,11 @@ public class MyContentProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
         Log.d(TAG, "Query Data: uri=" + uri + " ...");
-        // Select Fields, Where Conditions and Order Instructions are being ignored
+
         switch (uriMatcher.match(uri)) {
-            case URI_CODE_1:
+            case URI_CODE_1: // Return all tasks with their status
                 return db.taskDao().getTaskWithStatusCursor();
-            case URI_CODE_2:
+            case URI_CODE_2: // Return a single task by ID
                 long row = ContentUris.parseId(uri);
                 return db.taskDao().getTaskWithStatusByIdCursor(row);
             default:
@@ -95,9 +96,9 @@ public class MyContentProvider extends ContentProvider {
 
         switch (uriMatcher.match(uri)) {
             case URI_CODE_1:
-                return "vnd.android.cursor.dir/task";
+                return "vnd.android.cursor.dir/task";   // multiple rows (dir)
             case URI_CODE_2:
-                return "vnd.android.cursor.item/task";
+                return "vnd.android.cursor.item/task";  // a single row (item)
             default:
                 throw new RuntimeException("Get Type Method - Not supported URI: " + uri);
         }
@@ -105,13 +106,25 @@ public class MyContentProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-
+        Log.d(TAG, "Update Data: uri=" + uri + " , values → " + values);
         switch (uriMatcher.match(uri)) {
             case URI_CODE_2:
                 long row = ContentUris.parseId(uri);
+
+                int difficulty = values.getAsInteger("difficulty");
+                String statusName = values.getAsString("statusName");
+                String location = values.getAsString("location");
+
+                // Get existing task and modify fields
                 Task task = db.taskDao().getTaskById(row);
+                task.setDifficulty(difficulty);
+                task.setStatusId(db.statusDao().getStatus(statusName).getId());
+                task.setLocation(location);
+
+                // Returns number of rows updated (0 or 1)
                 return db.taskDao().updateTask(task);
             case URI_CODE_1:
+                // i could just add another DAO method that updates a list of tasks, but i believe there is no reason to do that
                 throw new UnsupportedOperationException("Cannot update a list of tasks !");
             default:
                 throw new RuntimeException("Update Method - Not supported URI: " + uri);
@@ -120,12 +133,17 @@ public class MyContentProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
+        Log.d(TAG, "Delete Data: uri=" + uri);
+
         switch (uriMatcher.match(uri)) {
             case URI_CODE_2:
                 long row = ContentUris.parseId(uri);
                 Task task = db.taskDao().getTaskById(row);
+
+                // Returns number of rows deleted (0 or 1)
                 return db.taskDao().deleteTask(task);
             case URI_CODE_1:
+                // i could just add another DAO method that deletes a list of tasks, but i believe there is no reason to do that
                 throw new UnsupportedOperationException("Cannot delete a list of tasks !");
             default:
                 throw new RuntimeException("Delete Method - Not supported URI: " + uri);
