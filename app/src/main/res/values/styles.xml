@@ -57,4 +57,13 @@
         <item name="android:textStyle">italic</item>
     </style>
 
+    <!-- Custom Dialog Layout Text Style -->
+    <style name="dialog_layout_title" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/fuzzy_bubbles</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

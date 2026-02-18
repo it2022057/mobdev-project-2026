@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -27,8 +28,10 @@ import hua.dit.mobdev_project_2026.db.MyConverters;
 import hua.dit.mobdev_project_2026.db.StatusDao;
 import hua.dit.mobdev_project_2026.db.Task;
 import hua.dit.mobdev_project_2026.db.TaskDao;
+import hua.dit.mobdev_project_2026.dialog.MyDialog;
 
-public class TaskDetailsActivity extends AppCompatActivity {
+public class TaskDetailsActivity extends AppCompatActivity
+                                 implements MyDialog.MyDialogListener {
 
     private static final String TAG = "TaskDetailsActivity";
 
@@ -41,6 +44,8 @@ public class TaskDetailsActivity extends AppCompatActivity {
     private StatusDao statusDao;
 
     private boolean isMarkAsCompletedHidden = false;
+
+    long taskId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +82,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
         FloatingActionButton mark_as_completed_button = findViewById(R.id.task_details_activity_mark_as_completed);
 
         // Get the id of the task selected (clicked)
-        long taskId = getIntent().getIntExtra("TASK_ID", -1);
+        taskId = getIntent().getIntExtra("TASK_ID", -1);
         Log.d(TAG, "taskId = " + taskId);
         if (taskId == -1) return;
 
@@ -118,7 +123,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
                 if (task.getLocation().isEmpty()) {
                     // Hide the navigate button
                     navigate_button.setVisibility(View.GONE);
-                    location_text.setText((CharSequence) "(not specified)");
+                    location_text.setText("(not specified)");
                 } else {
                     location_text.setText(task.getLocation());
                 }
@@ -143,23 +148,8 @@ public class TaskDetailsActivity extends AppCompatActivity {
         // Mark task as COMPLETED Button Listener
         mark_as_completed_button.setOnClickListener((v) -> {
             Log.i(TAG, "Mark as completed button pressed !");
-            executor.execute(() -> {
-                // DAOs
-                taskDao = db.taskDao();
-                statusDao = db.statusDao();
 
-                String newStatusName = "COMPLETED";
-                long newStatusId = statusDao.getStatus(newStatusName).getId();
-                taskDao.updateTaskStatus(taskId, newStatusId);
-
-                handler.post(() -> {
-                    // Hide the completed button because there is no reason to press it again
-                    mark_as_completed_button.setVisibility(View.GONE);
-                    isMarkAsCompletedHidden = true;
-                    status_text.setText(newStatusName);
-                    Toast.makeText(this, "Status updated", Toast.LENGTH_SHORT).show();
-                });
-            });
+            new MyDialog().show(getSupportFragmentManager(), "MyDialog");
         }); // End of mark_as_completed.setOnClickListener(...)
 
     }
@@ -170,5 +160,45 @@ public class TaskDetailsActivity extends AppCompatActivity {
         // Persist mark as completed button's hidden state
         outState.putBoolean(KEY_HIDDEN, isMarkAsCompletedHidden);
         Log.d(TAG, "Activity state (isMarkAsCompletedHidden) saved ...");
+    }
+
+    // The dialog fragment receives a reference to this Activity through the
+    // Fragment.onAttach() callback, which it uses to call the following
+    // methods defined by the NoticeDialogFragment.NoticeDialogListener
+    // interface.
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        // Get the application-wide singleton instance
+        MySingleton mySingleton = MySingleton.getInstance(getApplicationContext());
+
+        TextView status_text = findViewById(R.id.task_details_activity_status);
+        FloatingActionButton mark_as_completed_button = findViewById(R.id.task_details_activity_mark_as_completed);
+
+        // User presses YES
+        mySingleton.getExecutorService().execute(() -> {
+            // DAOs
+            taskDao = db.taskDao();
+            statusDao = db.statusDao();
+
+            String newStatusName = "COMPLETED";
+            long newStatusId = statusDao.getStatus(newStatusName).getId();
+            taskDao.updateTaskStatus(taskId, newStatusId);
+
+            mySingleton.getHandler().post(() -> {
+                // Hide the completed button because there is no reason to press it again
+                mark_as_completed_button.setVisibility(View.GONE);
+                isMarkAsCompletedHidden = true;
+                status_text.setText(newStatusName);
+                Toast.makeText(this, "Status updated", Toast.LENGTH_SHORT).show();
+            });
+        });
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        // User presses NO
+        if (dialog.getDialog() != null) {
+            dialog.getDialog().cancel();
+        }
     }
 }

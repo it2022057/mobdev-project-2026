@@ -16,7 +16,7 @@ import java.util.Calendar;
 public class TimePickerDialogFragment extends DialogFragment implements android.app.TimePickerDialog.OnTimeSetListener {
 
     private static final String TAG = "TimePickerDialogFrag";
-    public static final String RESULT_KEY = "start_time_result";
+    public static final String REQUEST_KEY = "start_time_result";
     public static final String HOUR_KEY = "hour";
     public static final String MINUTE_KEY = "minute";
 
@@ -43,6 +43,6 @@ public class TimePickerDialogFragment extends DialogFragment implements android.
         result.putInt(MINUTE_KEY, minute);
 
         // Send result back to NewTaskActivity
-        getParentFragmentManager().setFragmentResult(RESULT_KEY, result);
+        getParentFragmentManager().setFragmentResult(REQUEST_KEY, result);
     }
 }

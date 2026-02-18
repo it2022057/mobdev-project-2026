@@ -52,4 +52,11 @@
     <string name="task_details_completed_label">Completed</string>
     <!-- End of TaskDetailsActivity -->
 
+    <!-- Start of the string resources of MyDialog custom layout -->
+    <string name="dialog_title">Mark as completed ?</string>
+    <string name="dialog_message">Are you sure you want to mark this task as completed ?</string>
+    <string name="dialog_button_yes">YES</string>
+    <string name="dialog_button_no">NO</string>
+    <!-- End of the string resources of MyDialog custom layout -->
+
 </resources>

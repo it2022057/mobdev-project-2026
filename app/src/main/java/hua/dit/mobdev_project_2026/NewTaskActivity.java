@@ -72,7 +72,7 @@ public class NewTaskActivity extends AppCompatActivity {
             new TimePickerDialogFragment().show(getSupportFragmentManager(), "Start Time");
             // Listen for the result and update the UI
             getSupportFragmentManager().setFragmentResultListener(
-                    TimePickerDialogFragment.RESULT_KEY,
+                    TimePickerDialogFragment.REQUEST_KEY,
                     this,
                     (requestKey, bundle) -> {
                         int hour = bundle.getInt(TimePickerDialogFragment.HOUR_KEY);
