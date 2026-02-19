@@ -52,11 +52,19 @@
     <string name="task_details_completed_label">Completed</string>
     <!-- End of TaskDetailsActivity -->
 
-    <!-- Start of the string resources of MyDialog custom layout -->
-    <string name="dialog_title">Mark as completed ?</string>
-    <string name="dialog_message">Are you sure you want to mark this task as completed ?</string>
-    <string name="dialog_button_yes">YES</string>
-    <string name="dialog_button_no">NO</string>
-    <!-- End of the string resources of MyDialog custom layout -->
+    <!-- Start of the string resources of MarkAsCompletedDialog custom layout -->
+    <string name="mark_as_completed_dialog_title">Mark as completed ?</string>
+    <string name="mark_as_completed_dialog_message">Are you sure you want to mark this task as completed ?</string>
+    <string name="mark_as_completed_dialog_button_yes">YES</string>
+    <string name="mark_as_completed_dialog_button_no">NO</string>
+    <!-- End of the string resources of MarkAsCompletedDialog custom layout -->
+
+    <!-- Start of the string resources of RationaleDialog custom layout -->
+    <string name="rationale_dialog_title">Enable Notifications ?</string>
+    <string name="rationale_dialog_message">LookIt needs permission to send you a notification, so you do not miss your daily tasks. If this feature is declined, you will not be able to receive reminders for a task about to begin.</string>
+    <string name="rationale_dialog_button_enable">Enable</string>
+    <string name="rationale_dialog_button_no_thanks">No thanks</string>
+    <string name="rationale_dialog_button_do_not_ask_again">Don`t ask again</string>
+    <!-- End of the string resources of RationaleDialog custom layout -->
 
 </resources>

@@ -14,32 +14,32 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import hua.dit.mobdev_project_2026.R;
 
-public class MyDialog extends DialogFragment {
+public class MarkAsCompletedDialog extends DialogFragment {
 
-    private static final String TAG = "MyDialog";
+    private static final String TAG = "MarkAsCompletedDialog";
 
     // The activity that creates an instance of this dialog fragment must
     // implement this interface to receive event callbacks. Each method passes
     // the DialogFragment in case the host needs to query it
-    public interface MyDialogListener  {
+    public interface MarkAsCompletedDialogListener  {
         void onDialogPositiveClick(DialogFragment dialog);
         void onDialogNegativeClick(DialogFragment dialog);
     }
 
     // Use this instance of the interface to deliver action events
-    MyDialogListener  listener;
+    MarkAsCompletedDialogListener  listener;
 
-    // Override the Fragment.onAttach() method to instantiate the MyDialogListener
+    // Override the Fragment.onAttach() method to instantiate the MarkAsCompletedDialogListener
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         // Verify that the host activity implements the callback interface
         try {
-            // Instantiate the MyDialogListener so you can send events to the host
-            listener = (MyDialogListener ) context;
+            // Instantiate the MarkAsCompletedDialogListener so you can send events to the host
+            listener = (MarkAsCompletedDialogListener) context;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, so throw exception
-            throw new ClassCastException(context + " must implement MyDialogListener");
+            throw new ClassCastException(context + " must implement MarkAsCompletedDialogListener");
         }
     }
 
@@ -47,21 +47,21 @@ public class MyDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         // Convert XML to View Java Object
-        View view = getLayoutInflater().inflate(R.layout.dialog_layout, null);
+        View view = getLayoutInflater().inflate(R.layout.mark_as_completed_dialog_layout, null);
         // Create Alert Dialog using AlertDialog Builder
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity())
                 .setView(view)
-                .setPositiveButton(R.string.dialog_button_yes, (d,v)->{
+                .setPositiveButton(R.string.mark_as_completed_dialog_button_yes, (d,v)->{
                     Log.d(TAG, "YES");
 
                     // Send the positive button event back to the host activity.
-                    listener.onDialogPositiveClick(MyDialog.this);
+                    listener.onDialogPositiveClick(MarkAsCompletedDialog.this);
                 })
-                .setNegativeButton(R.string.dialog_button_no, (d,v)->{
+                .setNegativeButton(R.string.mark_as_completed_dialog_button_no, (d,v)->{
                     Log.d(TAG, "NO");
 
                     // Send the negative button event back to the host activity.
-                    listener.onDialogNegativeClick(MyDialog.this);
+                    listener.onDialogNegativeClick(MarkAsCompletedDialog.this);
                 });
 
         return builder.create();

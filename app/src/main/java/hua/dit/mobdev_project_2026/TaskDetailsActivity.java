@@ -28,10 +28,10 @@ import hua.dit.mobdev_project_2026.db.MyConverters;
 import hua.dit.mobdev_project_2026.db.StatusDao;
 import hua.dit.mobdev_project_2026.db.Task;
 import hua.dit.mobdev_project_2026.db.TaskDao;
-import hua.dit.mobdev_project_2026.dialog.MyDialog;
+import hua.dit.mobdev_project_2026.dialog.MarkAsCompletedDialog;
 
 public class TaskDetailsActivity extends AppCompatActivity
-                                 implements MyDialog.MyDialogListener {
+                                 implements MarkAsCompletedDialog.MarkAsCompletedDialogListener {
 
     private static final String TAG = "TaskDetailsActivity";
 
@@ -149,7 +149,7 @@ public class TaskDetailsActivity extends AppCompatActivity
         mark_as_completed_button.setOnClickListener((v) -> {
             Log.i(TAG, "Mark as completed button pressed !");
 
-            new MyDialog().show(getSupportFragmentManager(), "MyDialog");
+            new MarkAsCompletedDialog().show(getSupportFragmentManager(), "MarkAsCompletedDialog");
         }); // End of mark_as_completed.setOnClickListener(...)
 
     }
