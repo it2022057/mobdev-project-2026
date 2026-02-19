@@ -5,6 +5,7 @@ import androidx.annotation.Size;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -49,6 +50,9 @@ public class Task {
 
     @ColumnInfo
     private String location;
+
+    @Ignore
+    private boolean isNotified = false;
 
     // Constructor
     public Task(String shortName, String description, int difficulty, Date dateValue, Time startTime, int duration, long statusId, String location) {
@@ -133,6 +137,14 @@ public class Task {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public boolean isNotified() {
+        return isNotified;
+    }
+
+    public void setNotified(boolean notified) {
+        isNotified = notified;
     }
 
     @Override

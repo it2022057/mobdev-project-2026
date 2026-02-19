@@ -49,5 +49,8 @@ public interface TaskDao {
     @Query("SELECT t.id, t.short_name, s.name AS status FROM task t, status s WHERE t.status_id = s.id")
     public Cursor getTaskWithStatusCursor();
 
+    @Query("SELECT * FROM task WHERE status_id = :statusId ")
+    public List<Task> getTasksWithStatus(long statusId);
+
 
 }

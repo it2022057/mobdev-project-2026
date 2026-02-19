@@ -1,6 +1,8 @@
 package hua.dit.mobdev_project_2026;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -37,6 +39,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
 import hua.dit.mobdev_project_2026.bg.MyWorker;
+import hua.dit.mobdev_project_2026.bg.NotificationsWorker;
 import hua.dit.mobdev_project_2026.db.AppDatabase;
 import hua.dit.mobdev_project_2026.db.Status;
 import hua.dit.mobdev_project_2026.db.StatusDao;
@@ -266,8 +269,39 @@ public class MainActivity extends AppCompatActivity
                 .getBoolean("isRationaleDismissed", false);
     }
 
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is not in the Support Library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(getString(R.string.channel_id), name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
     private void onNotificationsPermissionGranted() {
         // Add the worker
+        createNotificationChannel();
+
+        // Periodic background work: Runs every 30 minutes anytime
+        // from minute 20 to minute 30 (10 min flex) to send notifications
+        PeriodicWorkRequest workRequest =
+                new PeriodicWorkRequest.Builder(NotificationsWorker.class,
+                        30, TimeUnit.MINUTES,
+                        10, TimeUnit.MINUTES)
+                        .build();
+
+        // Enqueue unique periodic work
+        final String workUID = "NOTIFICATIONS-PERIODIC-CHECK-123";
+        final ExistingPeriodicWorkPolicy workPolicy = ExistingPeriodicWorkPolicy.KEEP;
+        WorkManager.getInstance(getApplicationContext())
+                .enqueueUniquePeriodicWork(workUID, workPolicy, workRequest);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

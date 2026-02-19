@@ -67,4 +67,10 @@
     <string name="rationale_dialog_button_do_not_ask_again">Don`t ask again</string>
     <!-- End of the string resources of RationaleDialog custom layout -->
 
+    <!-- Notifications Channel information -->
+    <string name="channel_id">Channel-1</string>
+    <string name="channel_name">LoukIt Channel</string>
+    <string name="channel_description">This is a notifications channel for my daily tasks app</string>
+    <!-- End of the Notifications Channel information -->
+
 </resources>
