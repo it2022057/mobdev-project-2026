@@ -14,6 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mobdevproject2026">
 
+        <receiver
+            android:name=".receiver.NotificationReceiver"
+            android:exported="false" />
+
         <provider
             android:name=".MyContentProvider"
             android:authorities="hua.dit.mobdev_project_2026.my_provider"

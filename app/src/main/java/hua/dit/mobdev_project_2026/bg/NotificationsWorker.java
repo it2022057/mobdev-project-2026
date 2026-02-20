@@ -56,7 +56,7 @@ public class NotificationsWorker extends Worker {
         long recordedId = statusDao.getStatus("RECORDED").getId();
 
         // Gets all the tasks with status = RECORDED
-        List<Task> tasks = taskDao.getTasksWithStatus(recordedId);
+        List<Task> tasks = taskDao.getTasksByStatus(recordedId);
 
         for (Task task : tasks) {
             if (task.isNotified()) continue;
@@ -68,24 +68,24 @@ public class NotificationsWorker extends Worker {
             if (now >= start) continue;
 
             if (start <= windowEnd) {
-                long taskId = task.getId();
+                int taskId = Math.toIntExact(task.getId());
 
                 // Create a dismiss intent for the action button
                 Intent dismissIntent = new Intent(getApplicationContext(), NotificationReceiver.class);
                 dismissIntent.setAction("Dismiss");
                 dismissIntent.putExtra("TASK_ID", taskId);
                 PendingIntent dismissPendingIntent =
-                        PendingIntent.getBroadcast(getApplicationContext(), (int) taskId, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                        PendingIntent.getBroadcast(getApplicationContext(), taskId, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
                 // Create an explicit intent for an Activity in your app
                 Intent intent = new Intent(getApplicationContext(), TaskDetailsActivity.class);
                 intent.putExtra("TASK_ID", taskId);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-                PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
+                PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), taskId, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "Channel-1")
-                        .setSmallIcon(R.mipmap.ic_launcher_round)
+                        .setSmallIcon(R.drawable.ic_task_notification)
                         .setContentTitle("Reminder")
                         .setContentText("Task '" + task.getShortName() + "'" + " is about to begin")
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -97,7 +97,7 @@ public class NotificationsWorker extends Worker {
                 if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                     return Result.failure();
                 }
-                NotificationManagerCompat.from(getApplicationContext()).notify((int) taskId, builder.build());
+                NotificationManagerCompat.from(getApplicationContext()).notify(taskId, builder.build());
 
                 // Mark as notified so it won't repeat (avoid spam)
                 task.setNotified(true);

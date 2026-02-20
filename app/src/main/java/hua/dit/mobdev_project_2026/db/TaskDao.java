@@ -50,7 +50,7 @@ public interface TaskDao {
     public Cursor getTaskWithStatusCursor();
 
     @Query("SELECT * FROM task WHERE status_id = :statusId ")
-    public List<Task> getTasksWithStatus(long statusId);
+    public List<Task> getTasksByStatus(long statusId);
 
 
 }

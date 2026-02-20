@@ -85,11 +85,11 @@ public class MainActivity extends AppCompatActivity
         // Executor used to run tasks off the UI thread
         final Executor executor = mySingleton.getExecutorService();
 
-        // Periodic background work: Runs every 1 hour anytime
-        // from minute 45 to minute 60 (15 min flex) to update task status
+        // Periodic background work: Runs every half an hour anytime
+        // from minute 15 to minute 30 (15 min flex) to update task status
         PeriodicWorkRequest workRequest =
                 new PeriodicWorkRequest.Builder(MyWorker.class,
-                        1, TimeUnit.HOURS,
+                        30, TimeUnit.MINUTES,
                         15, TimeUnit.MINUTES)
                         .build();
 
@@ -289,8 +289,7 @@ public class MainActivity extends AppCompatActivity
         // Add the worker
         createNotificationChannel();
 
-        // Periodic background work: Runs every 30 minutes anytime
-        // from minute 20 to minute 30 (10 min flex) to send notifications
+        // Periodic background work: Runs every 15 minutes anytime to send notifications
         PeriodicWorkRequest workRequest =
                 new PeriodicWorkRequest.Builder(NotificationsWorker.class,
                         15, TimeUnit.MINUTES)

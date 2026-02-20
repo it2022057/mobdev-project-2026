@@ -5,7 +5,6 @@ import androidx.annotation.Size;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
-import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -51,7 +50,7 @@ public class Task {
     @ColumnInfo
     private String location;
 
-    @Ignore
+    @ColumnInfo(name = "is_notified")
     private boolean isNotified = false;
 
     // Constructor
