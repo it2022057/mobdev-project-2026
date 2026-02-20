@@ -43,7 +43,7 @@
             android:id="@+id/view_tasks_download_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="200dp"
+            android:layout_marginTop="100dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:background="@android:color/transparent"
@@ -51,7 +51,8 @@
             android:src="@drawable/ic_download"
             app:layout_constraintBottom_toTopOf="@+id/view_tasks_add_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recycler_view" />
+            app:layout_constraintTop_toBottomOf="@+id/recycler_view"
+            app:layout_constraintVertical_bias="1.0" />
 
         <!-- New Task ImageButton -->
         <ImageButton
