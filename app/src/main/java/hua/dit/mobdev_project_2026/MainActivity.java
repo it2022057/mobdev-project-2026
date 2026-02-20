@@ -293,8 +293,7 @@ public class MainActivity extends AppCompatActivity
         // from minute 20 to minute 30 (10 min flex) to send notifications
         PeriodicWorkRequest workRequest =
                 new PeriodicWorkRequest.Builder(NotificationsWorker.class,
-                        30, TimeUnit.MINUTES,
-                        10, TimeUnit.MINUTES)
+                        15, TimeUnit.MINUTES)
                         .build();
 
         // Enqueue unique periodic work

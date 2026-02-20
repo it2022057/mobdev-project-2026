@@ -3,9 +3,11 @@ package hua.dit.mobdev_project_2026.bg;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.work.Worker;
@@ -23,6 +25,7 @@ import hua.dit.mobdev_project_2026.db.AppDatabase;
 import hua.dit.mobdev_project_2026.db.StatusDao;
 import hua.dit.mobdev_project_2026.db.Task;
 import hua.dit.mobdev_project_2026.db.TaskDao;
+import hua.dit.mobdev_project_2026.receiver.NotificationReceiver;
 
 public class NotificationsWorker extends Worker {
 
@@ -65,9 +68,18 @@ public class NotificationsWorker extends Worker {
             if (now >= start) continue;
 
             if (start <= windowEnd) {
+                long taskId = task.getId();
+
+                // Create a dismiss intent for the action button
+                Intent dismissIntent = new Intent(getApplicationContext(), NotificationReceiver.class);
+                dismissIntent.setAction("Dismiss");
+                dismissIntent.putExtra("TASK_ID", taskId);
+                PendingIntent dismissPendingIntent =
+                        PendingIntent.getBroadcast(getApplicationContext(), (int) taskId, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
                 // Create an explicit intent for an Activity in your app
                 Intent intent = new Intent(getApplicationContext(), TaskDetailsActivity.class);
-                intent.putExtra("TASK_ID", task.getId());
+                intent.putExtra("TASK_ID", taskId);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
                 PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
@@ -79,9 +91,13 @@ public class NotificationsWorker extends Worker {
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         // Set the intent that fires when the user taps the notification.
                         .setContentIntent(pendingIntent)
-                        .setAutoCancel(true);
+                        .setAutoCancel(true)
+                        .addAction(R.drawable.ic_expired, "Dismiss", dismissPendingIntent);
 
-                NotificationManagerCompat.from(getApplicationContext()).notify((int) task.getId(), builder.build());
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    return Result.failure();
+                }
+                NotificationManagerCompat.from(getApplicationContext()).notify((int) taskId, builder.build());
 
                 // Mark as notified so it won't repeat (avoid spam)
                 task.setNotified(true);
